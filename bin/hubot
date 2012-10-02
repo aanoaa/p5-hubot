@@ -1,0 +1,34 @@
+#!/usr/bin/env perl
+use Hubot::Robot;
+use Cwd 'cwd';
+use File::Slurp qw/read_file/;
+use JSON::XS;
+use Getopt::Long::Descriptive;
+
+my ($opt, $usage) = describe_options(
+    "hubot %o <arg>",
+    [ 'adapter|a=s', 'The Adapter to use', { default => 'shell' } ],
+    [ 'name|n=s',    'The name of the robot in chat', { default => 'hubot' } ],
+    [ 'help',        'Display the help information' ],
+);
+
+print($usage->text), exit if $opt->help;
+
+my $robot = Hubot::Robot->new({
+    adapter => $opt->{adapter},
+    name    => $opt->{name},
+});
+
+$robot->adapter->cb_connected(
+    sub {
+        my $cwd = cwd();
+        my $scriptsFile = "$cwd/hubot-scripts.json";
+        if (-f $scriptsFile) {
+            my $json = read_file($scriptsFile);
+            my $scripts = decode_json($json);
+            $robot->loadHubotScripts($scripts);
+        }
+    }
+);
+
+$robot->run;

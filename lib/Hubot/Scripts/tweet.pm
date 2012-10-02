@@ -41,6 +41,6 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 SYNOPSIS
 
-just tweet like this `http://twitter.com/pdrucker_bot/status/250419748339331072`
+http://twitter.com/pdrucker_bot/status/250419748339331072
 
 =cut

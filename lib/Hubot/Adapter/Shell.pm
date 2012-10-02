@@ -54,7 +54,7 @@ sub run {
     binmode STDOUT, ':encoding(UTF-8)';
 
     $self->connect;
-    $self->setPrompt($self->robot->name . "> ");
+    $self->setPrompt( $self->robot->name . "> " );
     print $self->_prompt;
     my $w;
     $w = AnyEvent->io(

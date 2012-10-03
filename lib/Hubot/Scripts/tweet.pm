@@ -1,7 +1,5 @@
 package Hubot::Scripts::tweet;
 
-use utf8;
-use URI::Escape;
 use JSON::XS;
 
 sub load {

@@ -19,6 +19,7 @@ my $robot = Hubot::Robot->new({
     name    => $opt->{name},
 });
 
+$robot->alias($opt->{alias}) if $opt->{alias};
 $robot->adapter->cb_connected(
     sub {
         my $cwd = cwd();

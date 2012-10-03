@@ -1,23 +1,20 @@
 package Hubot::Scripts::help;
+use strict;
+use warnings;
 
 sub load {
-    my ($class, $robot) = @_;
-    $robot->hear(
+    my ( $class, $robot ) = @_;
+    $robot->respond(
         qr/help\s*(.*)?$/i,
         sub {
-            my $msg  = shift;    # Hubot::Response
-            my $emit = '';
-            my @cmds;
-            if ( @{ $msg->match } ) {
+            my $msg  = shift;              # Hubot::Response
+            my @cmds = $robot->commands;
+            if ( scalar @{ $msg->match } && $msg->match->[0] ) {
                 my $regex = $msg->match->[0];
-                @cmds = grep { $_ =~ /$regex/i } $robot->commands;
-            }
-            else {
-                @cmds = $robot->commands;
+                @cmds = grep { $_ =~ /$regex/i } @cmds;
             }
 
-            $emit = join( "\n", @cmds );
-            $msg->send($emit);
+            $msg->send(@cmds);
         }
     );
 }
@@ -26,6 +23,6 @@ sub load {
 
 =head1 SYNOPSIS
 
-    hubot> help
+    $ hubot: help <command>
 
 =cut

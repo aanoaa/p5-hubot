@@ -10,7 +10,8 @@ use Hubot::Listener;
 use Hubot::TextListener;
 use ScopedClient;
 
-has 'name' => ( is => 'ro', isa => 'Str' );
+has 'name' => ( is => 'rw', isa => 'Str' );
+has 'alias' => ( is => 'rw', isa => 'Str' );
 has 'adapter' => ( is => 'rw' );
 has 'brain' => (
     is => 'ro',
@@ -148,9 +149,45 @@ sub hear {
 
 sub respond {
     my ($self, $regex, $callback) = @_;
-    ## TODO: 존나 복잡해서 대충 처리 했음, 제대로 구현해야함
+
+    my $index = index "$regex", ':';
+    my $stringRegex = substr "$regex", ($index + 1), -1;
+    my $first = substr $stringRegex, 0, 1;
+
+    my $modifiers = '';
+    my $modifiersLen = $index - 3;
+    $modifiers = substr $stringRegex, 3, $modifiersLen if $modifiersLen > 0;
+    if ($first eq '^') {
+        print STDERR "Anchors don't work well with respond, perhaps you want to use 'hear'\n";
+        print STDERR "The regex in question was $stringRegex\n";
+    }
+
+    my $newRegex;
+    my $name = $self->name;
+    if ($self->alias) {
+        my $alias = $self->alias;
+        $alias =~ s/[-[\]{}()\*+?.,\\^$|#\s]/\\$&/g; # escape alias for regexp
+
+        ## TODO: fix to generate correct regex
+        ## qr/regex/$var 처럼 modifier 에 변수가 들어갈 수 없음
+        ## 일단 modifiers 가 있다면 `i` 라고 가정하고 들어감 WTH..
+        if ($modifiers) {
+            $newRegex = qr/^(?:$alias[:,]?|$name[:,]?)\s*(?:$stringRegex)/i;
+        } else {
+            $newRegex = qr/^(?:$alias[:,]?|$name[:,]?)\s*(?:$stringRegex)/
+        }
+    } else {
+        if ($modifiers) {
+            $newRegex = qr/^(?:$name[:,]?)\s*(?:$stringRegex)/i;
+        } else {
+            $newRegex = qr/^(?:$name[:,]?)\s*(?:$stringRegex)/
+        }
+    }
+
+    print "$newRegex\n" if $ENV{DEBUG};
     $self->addListener(new Hubot::TextListener(
-        regex => $regex,
+        robot => $self,
+        regex => $newRegex,
         callback => $callback
     ));
 }

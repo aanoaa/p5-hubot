@@ -1,9 +1,10 @@
 package Hubot::Scripts::tweet;
-
+use strict;
+use warnings;
 use JSON::XS;
 
 sub load {
-    my ($class, $robot) = @_;
+    my ( $class, $robot ) = @_;
     $robot->hear(
         qr/https?:\/\/(mobile\.)?twitter\.com\/.*?\/status\/([0-9]+)/i,
         sub {

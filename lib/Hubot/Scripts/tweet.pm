@@ -1,21 +1,12 @@
 package Hubot::Scripts::tweet;
 
-use Moose;
-use namespace::autoclean;
-
 use utf8;
 use URI::Escape;
 use JSON::XS;
 
-has 'robot' => (
-    is  => 'ro',
-    isa => 'Hubot::Robot',
-);
-
-sub BUILD {
-    my $self = shift;
-
-    $self->robot->hear(
+sub load {
+    my ($class, $robot) = @_;
+    $robot->hear(
         qr/https?:\/\/(mobile\.)?twitter\.com\/.*?\/status\/([0-9]+)/i,
         sub {
             my $msg = shift;    # Hubot::Response
@@ -33,11 +24,7 @@ sub BUILD {
     );
 }
 
-__PACKAGE__->meta->make_immutable;
-
 1;
-
-=pod
 
 =head1 SYNOPSIS
 

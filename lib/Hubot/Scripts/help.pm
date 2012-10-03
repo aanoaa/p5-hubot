@@ -1,13 +1,8 @@
 package Hubot::Scripts::help;
 
-use Moose;
-use namespace::autoclean;
-
-has 'robot' => ( is => 'ro' );
-
-sub BUILD {
-    my $self = shift;
-    $self->robot->hear(
+sub load {
+    my ($class, $robot) = @_;
+    $robot->hear(
         qr/help\s*(.*)?$/i,
         sub {
             my $msg  = shift;    # Hubot::Response
@@ -15,10 +10,10 @@ sub BUILD {
             my @cmds;
             if ( @{ $msg->match } ) {
                 my $regex = $msg->match->[0];
-                @cmds = grep { $_ =~ /$regex/i } $self->robot->commands;
+                @cmds = grep { $_ =~ /$regex/i } $robot->commands;
             }
             else {
-                @cmds = $self->robot->commands;
+                @cmds = $robot->commands;
             }
 
             $emit = join( "\n", @cmds );
@@ -27,11 +22,7 @@ sub BUILD {
     );
 }
 
-__PACKAGE__->meta->make_immutable;
-
 1;
-
-=pod
 
 =head1 SYNOPSIS
 

@@ -112,7 +112,7 @@ sub loadFile {
     my ($self, $script) = @_;
     my $full = "Hubot::Scripts::$script";
     eval "require $full; 1";
-    $full->new({ robot => $self });
+    $full->load($self);
     if ($@) {
         print STDERR "Unable to load $full: $@\n";
     } else {
@@ -155,7 +155,7 @@ sub respond {
     ));
 }
 
-sub http { ScopedClient->new(url => $_[1]) }
+sub http { ScopedClient->new($_[1]) }
 
 __PACKAGE__->meta->make_immutable;
 

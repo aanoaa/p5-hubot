@@ -116,15 +116,14 @@ sub headers {
 }
 
 sub buildOptions {
-    my ( $self, $params ) = @_;
-
-    $params->{options}{url} = URI->new( $params->{url} ) if $params->{url};
+    my ( $self, $url, $params ) = @_;
+    $params->{options}{url} = URI->new($url);
     $params->{options}{headers} ||= {};
 }
 
 sub BUILDARGS {
-    my ( $self, %params ) = @_;
-    $self->buildOptions( \%params );
+    my ( $self, $url, %params ) = @_;
+    $self->buildOptions( $url, \%params );
     return \%params;
 }
 
@@ -138,3 +137,11 @@ sub head   { shift->request( 'HEAD',   @_ ) }
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+=pod
+
+=head1 NAME
+
+ScopedClient - L<AnyEvent::HTTP> wrapper
+
+=cut

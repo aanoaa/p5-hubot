@@ -1,5 +1,4 @@
 package Hubot::Adapter::Shell;
-use Term::ReadLine;
 use Moose;
 use namespace::autoclean;
 

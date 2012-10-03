@@ -36,10 +36,19 @@ sub request {
     my %options = %{ $self->options };
     try {
         my %headers = %{ $options{headers} };
+
+        if ( 'HASH' eq ref($reqBody) ) {
+            my @pair;
+            push @pair, "$_=$reqBody->{$_}" for ( keys %$reqBody );
+            $reqBody = join( '&', @pair );
+        }
+
         my $sendingData =
           ( $method =~ m/^P/ && $reqBody && length $reqBody > 0 ) ? 1 : 0;
-        $headers{Host} = $options{url}->host;
+        $headers{Host} = $options{url}->host . ':' . $options{url}->port;
         $headers{'Content-Length'} = length $reqBody if $sendingData;
+        $headers{'Content-Type'} = 'application/x-www-form-urlencoded'
+          if ( $sendingData && !$headers{'Content-Type'} );
 
         if ( $options{auth} ) {
             $headers{Authorization} =
@@ -49,7 +58,6 @@ sub request {
         http_request(
             $method,
             $options{url},
-            timeout => 3,
             headers => \%headers,
             body    => $sendingData ? encode_utf8($reqBody) : undef,
             $callback

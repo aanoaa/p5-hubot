@@ -7,6 +7,13 @@ has 'robot' => (
     isa => 'Hubot::Robot'
 );
 
+has 'cb_connected' => (
+    traits  => ['Code'],
+    is      => 'rw',
+    isa     => 'CodeRef',
+    handles => { connect => 'execute' },
+);
+
 sub send  { }
 sub reply { }
 sub run   { }

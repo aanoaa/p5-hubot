@@ -19,13 +19,6 @@ has '_prompt' => (
     writer => 'setPrompt',
 );
 
-has 'cb_connected' => (
-    traits  => ['Code'],
-    is      => 'rw',
-    isa     => 'CodeRef',
-    handles => { connect => 'execute', },
-);
-
 has 'cv' => (
     is         => 'ro',
     lazy_build => 1,

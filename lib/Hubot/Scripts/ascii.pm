@@ -13,7 +13,7 @@ sub load {
                 sub {
                     my ( $body, $hdr ) = @_;
                     return if ( !$body || !$hdr->{Status} =~ /^2/ );
-                    $msg->send(split(/\n/, $body));
+                    $msg->send( split( /\n/, $body ) );
                 }
               );
         }

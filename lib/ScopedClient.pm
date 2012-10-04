@@ -89,11 +89,12 @@ sub path {
 
 sub query {
     my ( $self, $key, $value ) = @_;
-    if ('HASH' eq ref $key) {
-        while (my ($k, $v) = each %$key) {
+    if ( 'HASH' eq ref $key ) {
+        while ( my ( $k, $v ) = each %$key ) {
             $self->options->{url}->query_param( $k => $v );
         }
-    } else {
+    }
+    else {
         $self->options->{url}->query_param( $key => $value );
     }
     return $self;

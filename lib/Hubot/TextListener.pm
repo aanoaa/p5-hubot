@@ -18,6 +18,7 @@ sub BUILD {
                 my $regex = $self->regex;
                 return $message->text =~ m/$regex/;
             }
+            return;
         }
     );
 }

@@ -9,7 +9,13 @@ sub load {
         sub {
             my $msg  = shift;              # Hubot::Response
             my @cmds = $robot->commands;
-            if ( scalar @{ $msg->match } && $msg->match->[0] ) {
+
+            my $robotName = $robot->name;
+            unless ($robotName =~ m/^hubot$/) {
+                map { $_ =~ s/hubot/$robotName/ig } @cmds;
+            }
+
+            if ( $msg->match->[0] ) {
                 my $regex = $msg->match->[0];
                 @cmds = grep { $_ =~ /$regex/i } @cmds;
             }
@@ -23,6 +29,6 @@ sub load {
 
 =head1 SYNOPSIS
 
-    $ hubot: help <command>
+    hubot: help <command>
 
 =cut

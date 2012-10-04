@@ -17,15 +17,17 @@ sub load {
             my $bitly = $msg->match->[0];
             if ( length $bitly > 50 ) {
                 my $uri = URI->new("http://api.bitly.com/v3/shorten");
-                $uri->query_param( 'login' => $ENV{HUBOT_BITLY_USERNAME} );
-                $uri->query_param( 'apiKey' => $ENV{HUBOT_BITLY_API_KEY} );
-                $uri->query_param( 'longUrl' => $bitly );
-                $uri->query_param( 'format' => 'json' );
-                my $ua = LWP::UserAgent->new;
-                my $req = HTTP::Request->new('GET' => $uri);
+                $uri->query_form_hash(
+                    login   => $ENV{HUBOT_BITLY_USERNAME},
+                    apiKey  => $ENV{HUBOT_BITLY_API_KEY},
+                    longUrl => $bitly,
+                    format  => 'json'
+                );
+                my $ua  = LWP::UserAgent->new;
+                my $req = HTTP::Request->new( 'GET' => $uri );
                 my $res = $ua->request($req);
                 return unless $res->is_success;
-                my $data = decode_json($res->content);
+                my $data = decode_json( $res->content );
                 $bitly = $data->{data}{url};
             }
 

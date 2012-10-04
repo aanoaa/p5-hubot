@@ -9,6 +9,7 @@ use MIME::Base64;
 use HTTP::Request;
 use Encode qw/encode_utf8/;
 use AnyEvent::HTTP;
+use URI::QueryParam;
 
 has 'options' => (
     is  => 'ro',
@@ -88,6 +89,8 @@ sub path {
 
 sub query {
     my ( $self, $key, $value ) = @_;
+    $self->options->{url}->query_param( $key => $value );
+    return $self;
 }
 
 sub host {

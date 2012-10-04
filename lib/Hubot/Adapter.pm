@@ -22,7 +22,7 @@ sub close { }
 sub receive              { shift->robot->receive(@_) }
 sub users                { shift->robot->users }
 sub userForId            { shift->robot->userForId(@_) }
-sub userForName          { shift->robot->userName(@_) }
+sub userForName          { shift->robot->userForName(@_) }
 sub usersForFuzzyRawName { shift->robot->usersForFuzzyRawName(@_) }
 sub usersForFuzzyName    { shift->robot->usersForFuzzyName(@_) }
 sub http                 { shift->robot->http(@_) }

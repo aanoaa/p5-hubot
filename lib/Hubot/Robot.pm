@@ -94,6 +94,19 @@ sub userForId {
     return $user;
 }
 
+sub userForName {
+    my ($self, $name) = @_;
+    my $result;
+    for my $k (keys %{ $self->brain->data->{users} }) {
+        my $userName = $self->brain->data->{users}{$k}->name;
+        if (lc $userName eq lc $name) {
+            $result = $self->brain->data->{users}{$k};
+        }
+    }
+
+    return $result;
+}
+
 sub shutdown {
     my $self = shift;
     $self->adapter->close;
@@ -154,6 +167,7 @@ sub respond {
     my $stringRegex = substr "$regex", ($index + 1), -1;
     my $first = substr $stringRegex, 0, 1;
 
+    ## TODO: $^ 에 따른 분기; perl version 에 따라서 Regex object 의 modifier 위치가 달라짐
     my $modifiers = '';
     my $modifiersLen = $index - 3;
     $modifiers = substr $stringRegex, 3, $modifiersLen if $modifiersLen > 0;

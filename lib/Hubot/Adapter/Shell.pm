@@ -2,11 +2,11 @@ package Hubot::Adapter::Shell;
 use Moose;
 use namespace::autoclean;
 
+extends 'Hubot::Adapter';
+
 use AnyEvent;
 
 use Hubot::Message;
-
-extends 'Hubot::Adapter';
 
 has 'robot' => (
     is  => 'ro',

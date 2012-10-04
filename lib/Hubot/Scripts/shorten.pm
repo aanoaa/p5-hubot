@@ -1,7 +1,11 @@
 package Hubot::Scripts::shorten;
 use strict;
 use warnings;
-use WWW::Shorten::Bitly;
+use URI;
+use URI::QueryParam;
+use HTTP::Request;
+use LWP::UserAgent;
+use JSON::XS;
 use Encode 'decode';
 
 sub load {
@@ -12,11 +16,17 @@ sub load {
             my $msg   = shift;
             my $bitly = $msg->match->[0];
             if ( length $bitly > 50 ) {
-                $bitly = makeashorterlink(
-                    $bitly,
-                    $ENV{HUBOT_BITLY_USERNAME},
-                    $ENV{HUBOT_BITLY_API_KEY}
-                );
+                my $uri = URI->new("http://api.bitly.com/v3/shorten");
+                $uri->query_param( 'login' => $ENV{HUBOT_BITLY_USERNAME} );
+                $uri->query_param( 'apiKey' => $ENV{HUBOT_BITLY_API_KEY} );
+                $uri->query_param( 'longUrl' => $bitly );
+                $uri->query_param( 'format' => 'json' );
+                my $ua = LWP::UserAgent->new;
+                my $req = HTTP::Request->new('GET' => $uri);
+                my $res = $ua->request($req);
+                return unless $res->is_success;
+                my $data = decode_json($res->content);
+                $bitly = $data->{data}{url};
             }
 
             $msg->http( $msg->match->[0] )->header( "User-Agent",

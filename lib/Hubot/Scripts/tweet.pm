@@ -19,6 +19,7 @@ sub load {
                     $msg->send("$tweet->{user}{screen_name}: $tweet->{text}");
                 }
                   );
+            $msg->message->finish;
         }
     );
 }
@@ -27,6 +28,6 @@ sub load {
 
 =head1 SYNOPSIS
 
-http://twitter.com/pdrucker_bot/status/250419748339331072
+http://twitter.com/<username>/status/<tweetid>
 
 =cut

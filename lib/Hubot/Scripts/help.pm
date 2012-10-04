@@ -12,7 +12,7 @@ sub load {
 
             my $robotName = $robot->name;
             unless ($robotName =~ m/^hubot$/) {
-                map { $_ =~ s/hubot/$robotName/ig } @cmds;
+                map { s/hubot/$robotName/ig } @cmds;
             }
 
             if ( $msg->match->[0] ) {

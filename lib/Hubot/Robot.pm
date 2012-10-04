@@ -10,6 +10,8 @@ use Hubot::Listener;
 use Hubot::TextListener;
 use ScopedClient;
 
+our $VERSION = 'v0.0.1';
+
 has 'name' => ( is => 'rw', isa => 'Str' );
 has 'alias' => ( is => 'rw', isa => 'Str' );
 has 'adapter' => ( is => 'rw' );

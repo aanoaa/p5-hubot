@@ -71,6 +71,8 @@ sub load {
 
                     my ($title) = $body =~ m/<title>(.*)<\/title>/s;
                     $title = 'no title' unless $title;
+                    $title =~ s/\n//g;
+                    $title =~ s/(^\s+|\s+$)//g;
                     $msg->send("[$title] - $bitly");
                 }
               );

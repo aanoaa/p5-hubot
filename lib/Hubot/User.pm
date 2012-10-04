@@ -19,6 +19,11 @@ sub get {
     return $self->options->{$key};
 }
 
+sub name {
+    my $self = shift;
+    return $self->get('name') || $self->id;
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;

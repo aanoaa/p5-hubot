@@ -29,7 +29,7 @@ sub topic {
 
 sub reply {
     my ( $self, @strings ) = @_;
-    $self->robot->adapter->topic( $self->message->user, @strings );
+    $self->robot->adapter->reply( $self->message->user, @strings );
 }
 
 sub random {

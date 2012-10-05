@@ -78,10 +78,10 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 DESCRIPTION
 
-Brain with external storage like a L<Hubot::Scrips::redisBrain>, C<value> must be a Scalar or HashRef or ArrayRef.
+Brain with external storage like a L<Hubot::Scrips::redisBrain>, C<value> must be a B<Scalar> or B<HashRef> or B<ArrayRef>.
 
-C<$robot->brain->data> will convert to json string and stored to external storage.
-so, if you trying store perl object, it will fail.
+C<$robot-E<gt>brain-E<gt>data> will convert to json string and stored to external storage.
+so, if you trying to store perl object, it will fail.
 
 without external storage, everything is fine to store to memory.
 

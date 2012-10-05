@@ -146,7 +146,7 @@ sub parseHelp {
 
     $usage =~ s/^Usage://;
     $usage =~ s/(^\s+|\s+$)//gm;
-    $self->addCommand("# $usage");
+    $self->addCommand("# $usage") if $usage;
 }
 
 sub hear {

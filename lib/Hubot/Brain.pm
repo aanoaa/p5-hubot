@@ -67,3 +67,22 @@ sub mergeData {
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+=pod
+
+=head1 SYNOPSIS
+
+    $robot->brain->data->{key} = ''; # scalar
+    $robot->brain->data->{key} = {}; # HashRef
+    $robot->brain->data->{key} = []; # ArrayRef
+
+=head1 DESCRIPTION
+
+Brain with external storage like a L<Hubot::Scrips::redisBrain>, C<value> must be a Scalar or HashRef or ArrayRef.
+
+C<$robot->brain->data> will convert to json string and stored to external storage.
+so, if you trying store perl object, it will fail.
+
+without external storage, everything is fine to store to memory.
+
+=cut

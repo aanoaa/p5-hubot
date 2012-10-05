@@ -50,13 +50,13 @@ sub parse_msg {
 
 sub send {
     my ( $self, $user, @strings ) = @_;
-    $self->irc->send_srv( 'PRIVMSG', $user->get('room'), encode_utf8($_) )
+    $self->irc->send_srv( 'PRIVMSG', $user->{room}, encode_utf8($_) )
       for @strings;
 }
 
 sub reply {
     my ( $self, $user, @strings ) = @_;
-    @strings = map { $user->name . ": $_" } @strings;
+    @strings = map { $user->{name} . ": $_" } @strings;
     $self->send( $user, @strings );
 }
 
@@ -158,7 +158,7 @@ sub checkCanStart {
     }
     elsif ( !$ENV{HUBOT_IRC_ROOMS} ) {
         print STDERR
-          "HUBOT_IRC_ROOM is not defined, try: export HUBOT_IRC_ROOM='#myroom'\n";
+          "HUBOT_IRC_ROOMS is not defined, try: export HUBOT_IRC_ROOMS='#myroom'\n";
         exit(2);
     }
     elsif ( !$ENV{HUBOT_IRC_SERVER} ) {

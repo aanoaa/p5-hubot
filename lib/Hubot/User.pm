@@ -1,29 +1,11 @@
 package Hubot::User;
-use Moose;
-use namespace::autoclean;
+use strict;
+use warnings;
 
-has 'id' => ( is => 'ro', isa => 'Int' );
-has 'options' => (
-    is      => 'ro',
-    isa     => 'HashRef',
-    default => sub { {} },
-);
-
-sub set {
-    my ( $self, $key, $value ) = @_;
-    $self->options->{$key} = $value;
+sub new {
+    my ( $class, $ref ) = @_;
+    $ref->{name} ||= $ref->{id};
+    bless $ref, $class;
 }
-
-sub get {
-    my ( $self, $key ) = @_;
-    return $self->options->{$key};
-}
-
-sub name {
-    my $self = shift;
-    return $self->get('name') || $self->id;
-}
-
-__PACKAGE__->meta->make_immutable;
 
 1;

@@ -35,7 +35,7 @@ sub send {
 
 sub reply {
     my ( $self, $user, @strings ) = @_;
-    @strings = map { $user->name . ": $_" } @strings;
+    @strings = map { $user->{name} . ": $_" } @strings;
     $self->send( $user, @strings );
 }
 

@@ -80,16 +80,12 @@ sub userForId {
     my ($self, $id, $options) = @_;
     my $user = $self->brain->data->{users}{$id};
     unless ($user) {
-        $user = Hubot::User->new({
-            id      => $id,
-            options => $options
-        });
-
+        $user = Hubot::User->new({ id => $id, %$options });
         $self->brain->data->{users}{$id} = $user;
     }
 
     my $options_room = $options->{room} || '';
-    if ($options_room ne $user->get('room')) {
+    if ($options_room ne $user->{room}) {
         $self->brain->data->{users}{$id} = $user;
     }
 
@@ -100,7 +96,7 @@ sub userForName {
     my ($self, $name) = @_;
     my $result;
     for my $k (keys %{ $self->brain->data->{users} }) {
-        my $userName = $self->brain->data->{users}{$k}->name;
+        my $userName = $self->brain->data->{users}{$k}{name};
         if (lc $userName eq lc $name) {
             $result = $self->brain->data->{users}{$k};
         }
@@ -111,8 +107,8 @@ sub userForName {
 
 sub shutdown {
     my $self = shift;
-    $self->adapter->close;
     $self->brain->close;
+    $self->adapter->close;
 }
 
 sub loadHubotScripts {

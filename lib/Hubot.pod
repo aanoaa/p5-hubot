@@ -1,0 +1,63 @@
+=pod
+
+=head1 NAME
+
+Hubot - L<AnyEvent> based L<https://github.com/github/hubot>
+
+=head1 SYNOPSIS
+
+    $ echo '["help"]' > hubot-scripts.json
+    $ hubot
+    hubot> hubot help
+
+=head1 DESCRIPTION
+
+=head2 CONFIGURATION
+
+describe scripts name to F<hubot-scripts.json>
+
+example)
+
+    [
+      "help",
+      "tweet",
+      "shorten",
+      "ascii"
+    ]
+
+each scripts has each congiruation rules.
+
+check it out C<perldoc Hubot::Scripts::E<lt>scriptE<gt>>.
+
+described order can affect the bot's action.
+if "shorten" is appear than "tweet", C<http://twitter.com/E<lt>usernameE<gt>/status/E<lt>tweetidE<gt>> processed twice by "shorten" and "tweet".
+the secret is behind of `tweet` script.
+actually, L<Hubot::Message> C<finish> method.
+
+=head2 BUNDLE SCRIPTS
+
+=over
+
+=item L<Hubot::Scripts::help>
+
+=item L<Hubot::Scripts::ascii>
+
+=item L<Hubot::Scripts::shorten>
+
+=item L<Hubot::Scripts::tweet>
+
+=back
+
+=head1 SEE ALSO
+
+=over
+
+=item L<Hubot::Scripts>
+
+=item L<https://github.com/github/hubot>
+
+=item L<https://github.com/github/hubot>
+
+=back
+
+=cut

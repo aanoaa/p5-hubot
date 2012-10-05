@@ -8,13 +8,61 @@ has 'data' => (
     default => sub { { users => {} } },
 );
 
-has 'resetSaveInterval' => (
-    is      => 'ro',
-    isa     => 'Int',
-    default => 5,
+has 'cb_save' => (
+    traits  => ['Code'],
+    is      => 'rw',
+    isa     => 'CodeRef',
+    handles => { saved => 'execute' },
+    default => sub {
+        sub { }
+    }
 );
 
-sub close { }
+has 'cb_close' => (
+    traits  => ['Code'],
+    is      => 'rw',
+    isa     => 'CodeRef',
+    handles => { closed => 'execute' },
+    default => sub {
+        sub { }
+    }
+);
+
+has 'cb_loaded' => (
+    traits  => ['Code'],
+    is      => 'rw',
+    isa     => 'CodeRef',
+    handles => { loaded => 'execute' },
+    default => sub {
+        sub { }
+    }
+);
+
+sub save {
+    my $self = shift;
+    $self->saved( $self->data );
+}
+
+sub close {
+    my $self = shift;
+    $self->save;
+    $self->closed;
+}
+
+sub mergeData {
+    my ( $self, $data ) = @_;
+    for my $key ( keys %$data ) {
+        if ( $key eq 'users' ) {
+            for my $k ( keys %{ $data->{$key} } ) {
+                bless $data->{$key}{$k}, 'Hubot::User';
+            }
+        }
+
+        $self->data->{$key} = $data->{$key};
+    }
+
+    $self->loaded( $self->data );
+}
 
 __PACKAGE__->meta->make_immutable;
 

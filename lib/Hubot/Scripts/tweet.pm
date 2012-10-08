@@ -15,6 +15,7 @@ sub load {
                 sub {
                     my ( $body, $hdr ) = @_;
                     return if ( !$body || !$hdr->{Status} =~ /^2/ );
+                    print "$body\n" if $ENV{DEBUG};
                     my $tweet = decode_json($body);
                     $msg->send("$tweet->{user}{screen_name}: $tweet->{text}");
                 }

@@ -16,17 +16,6 @@ has 'options' => (
     isa => 'HashRef',
 );
 
-has 'defaultPort' => (
-    is      => 'ro',
-    isa     => 'HashRef',
-    default => sub {
-        {
-            http  => 80,
-            https => 443,
-        };
-    },
-);
-
 sub request {
     my ( $self, $method, $reqBody, $callback ) = @_;
     if ( 'CODE' eq ref($reqBody) ) {
@@ -160,6 +149,71 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-ScopedClient - L<AnyEvent::HTTP> wrapper
+AnyEvent based L<https://github.com/technoweenie/node-scoped-http-client>
+
+=head1 SYNOPSIS
+
+    my $client = ScopedClient->new('http://example.com');
+    $client->request('GET', sub {
+        my ($body, $hdr) = @_;    # $body is undef if error occured
+        return if ( !$body || !$hdr->{Status} =~ /^2/ );
+        # do something;
+    });
+
+    # shorcut for GET
+    $client->get(sub {
+        my ($body, $hdr) = @_;    # $body is undef if error occured
+        return if ( !$body || !$hdr->{Status} =~ /^2/ );
+        # do something;
+    });
+
+    # Content-Type: application/x-www-form-urlencoded
+    $client->post(
+        { foo => 1, bar => 2 },    # note this.
+        sub {
+            my ($body, $hdr) = @_;    # $body is undef if error occured
+            return if ( !$body || !$hdr->{Status} =~ /^2/ );
+            # do something;
+        }
+    );
+
+    # application/x-www-form-urlencoded post request
+    $client->post(
+        "foo=1&bar=2"    # and note this.
+        sub {
+            my ($body, $hdr) = @_;    # $body is undef if error occured
+            return if ( !$body || !$hdr->{Status} =~ /^2/ );
+            # do something;
+        }
+    );
+
+    # Content-Type: application/json
+    use JSON::XS;
+    $client->header('Content-Type', 'application/json')
+        ->post(
+            encode_json({ foo => 1 }),
+            sub {
+                my ($body, $hdr) = @_;    # $body is undef if error occured
+                return if ( !$body || !$hdr->{Status} =~ /^2/ );
+                # do something;
+            }
+        );
+
+    $client->header('Accept', 'application/json')
+        ->query({ key => 'value' })
+        ->query('key', 'value')
+        ->get(sub {
+            my ($body, $hdr) = @_;    # $body is undef if error occured
+            return if ( !$body || !$hdr->{Status} =~ /^2/ );
+            # do something;
+    });
+
+=head1 DESCRIPTION
+
+L<AnyEvent::HTTP> wrapper
+
+=head1 SEE ALSO
+
+L<https://github.com/technoweenie/node-scoped-http-client>
 
 =cut

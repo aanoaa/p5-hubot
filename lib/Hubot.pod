@@ -52,11 +52,23 @@ actually, L<Hubot::Message> C<finish> method.
 
 =over
 
-=item L<Hubot::Scripts>
-
 =item L<https://github.com/github/hubot>
 
-=item L<https://github.com/github/hubot>
+=item L<https://github.com/github/hubot-scripts>
+
+=item L<Hubot::Robot>
+
+=item L<Hubot::Adapter>
+
+=item L<Hubot::Brain>
+
+=item L<Hubot::Listener>
+
+=item L<Hubot::Message>
+
+=item L<Hubot::Response>
+
+=item L<Hubot::User>
 
 =back
 

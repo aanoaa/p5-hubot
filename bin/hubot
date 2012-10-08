@@ -33,3 +33,37 @@ $robot->adapter->cb_connected(
 );
 
 $robot->run;
+
+=pod
+
+=head1 SYNOPSIS
+
+    $ hubot --help
+    $ echo '{"help"}' > ./hubot-scripts.json    # `hubot-scripts.json` is required.
+    $ hubot
+    hubot> hubot help
+    # hubot: help <command>
+    hubot> exit
+
+    # irc?
+    $ HUBOT_IRC_ROOMS='#myroom' \
+      HUBOT_IRC_SERVER='irc.myserver.com' \
+      HUBOT_IRC_PORT=6667 \
+      hubot -a irc
+    $ perldoc Hubot::Adapter::Irc    # for more irc env info
+
+=head1 DESCRIPTION
+
+C<hubot> is a Command Line Interface for L<Hubot>.
+
+=head1 SEE ALSO
+
+=over
+
+=item L<Hubot>
+
+=item L<Hubot::Adapter::Irc>
+
+=back
+
+=cut

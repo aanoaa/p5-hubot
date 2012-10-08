@@ -39,7 +39,8 @@ my %WriteMakefileArgs = (
     "namespace::autoclean" => 0,
     "strict" => 0,
     "utf8" => 0,
-    "warnings" => 0
+    "warnings" => 0,
+    "LWP::Protocol::https" => 0,
   },
   "VERSION" => "0.0.1",
   "test" => {

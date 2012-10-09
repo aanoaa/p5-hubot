@@ -133,7 +133,7 @@ sub run {
         }
     );
 
-    $self->connect;
+    $self->emit('connected');
     $self->cv->begin;
     $self->irc->connect(
         $options{server},

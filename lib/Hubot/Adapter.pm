@@ -2,16 +2,11 @@ package Hubot::Adapter;
 use Moose;
 use namespace::autoclean;
 
+extends 'Hubot::EventEmitter';
+
 has 'robot' => (
     is  => 'ro',
     isa => 'Hubot::Robot'
-);
-
-has 'cb_connected' => (
-    traits  => ['Code'],
-    is      => 'rw',
-    isa     => 'CodeRef',
-    handles => { connect => 'execute' },
 );
 
 sub send  { }
@@ -30,3 +25,20 @@ sub http                 { shift->robot->http(@_) }
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+=pod
+
+=head1 SYNOPSIS
+
+    my $adapter = Hubot::Adapter->new( robot => $robot );
+    $adapter->on('connected', sub {
+        # so something
+    });
+
+    # Hubot::Adapter::XXX
+    sub run {
+        my $self = shift;
+        $self->emit('connected');
+    }
+
+=cut

@@ -20,7 +20,9 @@ my $robot = Hubot::Robot->new({
 });
 
 $robot->alias($opt->{alias}) if $opt->{alias};
-$robot->adapter->cb_connected(
+
+$robot->adapter->on(
+    'connected',
     sub {
         my $cwd = cwd();
         my $scriptsFile = "$cwd/hubot-scripts.json";

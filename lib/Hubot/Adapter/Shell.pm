@@ -45,7 +45,7 @@ sub run {
     local $| = 1;
     binmode STDOUT, ':encoding(UTF-8)';
 
-    $self->connect;
+    $self->emit('connected');
     $self->setPrompt( $self->robot->name . "> " );
     print $self->_prompt;
     my $w;

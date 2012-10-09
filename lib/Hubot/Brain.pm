@@ -10,36 +10,6 @@ has 'data' => (
     default => sub { { users => {} } },
 );
 
-has 'cb_save' => (
-    traits  => ['Code'],
-    is      => 'rw',
-    isa     => 'CodeRef',
-    handles => { saved => 'execute' },
-    default => sub {
-        sub { }
-    }
-);
-
-has 'cb_close' => (
-    traits  => ['Code'],
-    is      => 'rw',
-    isa     => 'CodeRef',
-    handles => { closed => 'execute' },
-    default => sub {
-        sub { }
-    }
-);
-
-has 'cb_loaded' => (
-    traits  => ['Code'],
-    is      => 'rw',
-    isa     => 'CodeRef',
-    handles => { loaded => 'execute' },
-    default => sub {
-        sub { }
-    }
-);
-
 sub save {
     my $self = shift;
     $self->emit('save', $self->data);

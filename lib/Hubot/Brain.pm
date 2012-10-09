@@ -2,6 +2,8 @@ package Hubot::Brain;
 use Moose;
 use namespace::autoclean;
 
+extends 'Hubot::EventEmitter';
+
 has 'data' => (
     is      => 'rw',
     isa     => 'HashRef',
@@ -40,13 +42,13 @@ has 'cb_loaded' => (
 
 sub save {
     my $self = shift;
-    $self->saved( $self->data );
+    $self->emit('save', $self->data);
 }
 
 sub close {
     my $self = shift;
     $self->save;
-    $self->closed;
+    $self->emit('close');
 }
 
 sub mergeData {
@@ -61,7 +63,7 @@ sub mergeData {
         $self->data->{$key} = $data->{$key};
     }
 
-    $self->loaded( $self->data );
+    $self->emit('loaded', $self->data);
 }
 
 __PACKAGE__->meta->make_immutable;

@@ -20,6 +20,7 @@ my %WriteMakefileArgs = (
   "PREREQ_PM" => {
     "AnyEvent" => 0,
     "AnyEvent::HTTP" => 0,
+    "AnyEvent::HTTP::ScopedClient" => 0,
     "AnyEvent::IRC::Client" => 0,
     "Cwd" => 0,
     "Encode" => 0,

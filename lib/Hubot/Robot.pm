@@ -4,11 +4,12 @@ use namespace::autoclean;
 
 use Pod::Usage;
 
+use AnyEvent::HTTP::ScopedClient;
+
 use Hubot::User;
 use Hubot::Brain;
 use Hubot::Listener;
 use Hubot::TextListener;
-use ScopedClient;
 
 our $VERSION = 'v0.0.1';
 
@@ -204,7 +205,7 @@ sub respond {
     ));
 }
 
-sub http { ScopedClient->new($_[1]) }
+sub http { AnyEvent::HTTP::ScopedClient->new($_[1]) }
 
 __PACKAGE__->meta->make_immutable;
 

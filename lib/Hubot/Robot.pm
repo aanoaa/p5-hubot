@@ -149,7 +149,7 @@ sub parseHelp {
 
     $usage =~ s/^Usage://;
     $usage =~ s/(^\s+|\s+$)//gm;
-    $self->addCommand("# $usage") if $usage;
+    $self->addCommand($_) for split(/\n/, $usage);
 }
 
 sub hear {

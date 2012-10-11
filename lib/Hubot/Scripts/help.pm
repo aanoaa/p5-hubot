@@ -20,6 +20,7 @@ sub load {
                 @cmds = grep { $_ =~ /$regex/i } @cmds;
             }
 
+            map { s/^/\# / } @cmds;
             $msg->send(@cmds);
         }
     );

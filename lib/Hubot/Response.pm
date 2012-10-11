@@ -50,3 +50,41 @@ sub http {
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+=pod
+
+=encoding utf-8
+
+=head1 NAME
+
+Hubot::Response
+
+=head1 SYNOPSIS
+
+    ## generally Hubot::Response used to Hubot::Script::* callback.
+    ## assume this is a callback subroutine.
+    $robot->hear(
+        qr/echo (.+)/i,
+        sub {
+            my $res = shift;
+            $res->reply($res->match->[0]); # aanoaa> echo 123
+                                           #  hubot> aanoaa: 123
+        }
+    );
+
+=head1 DESCRIPTION
+
+Interface between C<Hubot::Script::*> callback and C<Hubot::Adapter::*>
+
+=head1 AUTHOR
+
+Hyungsuk Hong <hshong@perl.kr>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2012 by Hyungsuk Hong.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut

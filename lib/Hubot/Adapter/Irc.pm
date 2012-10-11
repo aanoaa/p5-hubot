@@ -177,3 +177,80 @@ sub checkCanStart {
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+=pod
+
+=encoding utf-8
+
+=head1 NAME
+
+Hubot::Adapter::Irc - IRC adapter for L<Hubot>
+
+=head1 SYNOPSIS
+
+    $ export HUBOT_IRC_SERVER='irc.myserver.com'
+    $ export HUBOT_IRC_ROOMS='#mychannel'
+    $ hubot -a irc
+
+=head1 DESCRIPTION
+
+IRC is a fairly old protocol for Internet chat.
+
+=head1 CONFIGURATION
+
+=head2 REQUIRED
+
+=over
+
+=item HUBOT_IRC_SERVER
+
+This is the full hostname or IP address of the IRC server you want your hubot to connect to. Make a note of it.
+
+=item HUBOT_IRC_ROOMS
+
+This is a comma separated list of the IRC channels you want your hubot to join. They must include the C<#>. Make a note of them.
+
+=back
+
+=head2 OPTIONAL
+
+=over
+
+=item HUBOT_IRC_NICK
+
+This is the optional nick you want your hubot to join with. If omitted it will default to the name of your hubot.
+
+=item HUBOT_IRC_PORT
+
+This is the optional port of the IRC server you want your hubot to connect to. If omitted the default is C<6667>. Make a note of it if required.
+
+=item HUBOT_IRC_PASSWORD
+
+This is the optional password of the IRC server you want your hubot to connect to. If the IRC server doesn't require a password, this can be omitted. Make a note of it if required.
+
+=item HUBOT_IRC_NICKSERV_PASSWORD
+
+This is the optional Nickserv password if your hubot is using a nick registered with Nickserv on the IRC server. Make a note of it if required.
+
+=item HUBOT_IRC_NICKSERV_USERNAME
+
+This is the optional Nickserv username if your hubot is using a nick registered with Nickserv on the IRC server, e.g. C</msg NickServ identify E<lt>usernameE<gt> E<lt>passwordE<gt>>.
+
+=back
+
+=head1 SEE ALSO
+
+L<https://github.com/github/hubot/wiki/Adapter:-IRC>
+
+=head1 AUTHOR
+
+Hyungsuk Hong <hshong@perl.kr>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2012 by Hyungsuk Hong.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut

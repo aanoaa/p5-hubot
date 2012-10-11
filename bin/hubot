@@ -38,6 +38,10 @@ $robot->run;
 
 =pod
 
+=head1 NAME
+
+hubot - convenience command line interface L<Hubot::Robot>.
+
 =head1 SYNOPSIS
 
     $ hubot --help
@@ -59,6 +63,7 @@ $robot->run;
       HUBOT_CAMPFIRE_ACCOUNT=myaccount \
       hubot -a campfire
 
+    $ perldoc Hubot
     $ perldoc Hubot::Adapter::Irc
     $ perldoc Hubot::Adapter::Campfire
 
@@ -77,5 +82,16 @@ C<hubot> is a Command Line Interface for L<Hubot>.
 =item L<Hubot::Adapter::Campfire>
 
 =back
+
+=head1 AUTHOR
+
+Hyungsuk Hong <hshong@perl.kr>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2012 by Hyungsuk Hong.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut

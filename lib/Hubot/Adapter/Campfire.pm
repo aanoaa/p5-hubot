@@ -7,7 +7,6 @@ extends 'Hubot::Adapter';
 use AnyEvent;
 use AnyEvent::HTTP;
 use AnyEvent::Campfire::Client;
-use MIME::Base64;
 use JSON::XS;
 use Encode 'encode_utf8';
 use HTTP::Request;
@@ -83,7 +82,7 @@ sub run {
                 );
                 $req->header( 'Accept',        'application/json' );
                 $req->header( 'Authorization', $bot->authorization );
-                my $res = $self->httpClient->request($req);
+                my $res = $self->httpClient->request($req); # non-async
                 return unless $res->is_success;
 
                 my $userData;
@@ -97,6 +96,7 @@ sub run {
                 $user->{name} = $userData->{user}{name};
             }
 
+            ## TODO: support EnterMessage, LeaveMessage
             $self->receive(
                 new Hubot::TextMessage(
                     user => $user,
@@ -117,8 +117,7 @@ sub run {
     $bot->on(
         'leave',
         sub {
-            print "Goodbye, cruel world\n";
-            $self->cv->send;
+            $self->cv->send; # TODO: support multiple rooms `leave`
         }
     );
 
@@ -135,3 +134,64 @@ sub close {
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+=pod
+
+=encoding utf-8
+
+=head1 NAME
+
+Hubot::Adapter::Campfire - Campfire adapter for L<Hubot>
+
+=head1 SYNOPSIS
+
+    $ export HUBOT_CAMPFIRE_TOKEN='xxxx'
+    $ export HUBOT_CAMPFIRE_ROOMS='1234'
+    $ export HUBOT_CAMPFIRE_ACCOUNT='aanoaa'
+    $ hubot -a campfire
+
+=head1 DESCRIPTION
+
+Campfire is the web based chat application built by L<37 Signals|http://37signals.com/>.
+The Campfire adapter is one of the original adapters in Hubot.
+
+=head1 CONFIGURATION
+
+=over
+
+=item HUBOT_CAMPFIRE_TOKEN
+
+This can be found by logging in with your hubot's account click the My Info link and make a note of the API token.
+
+=item HUBOT_CAMPFIRE_ROOMS
+
+If you join the rooms you want your hubot to join will see notice a numerical ID for the room in the URL. Make a note of each ID for the rooms you want your hubot to join.
+
+=item HUBOT_CAMPFIRE_ACCOUNT
+
+This is simply the first part of the domain you visit for your Campfire account. For example if your Campfire was at C<hubot.campfirenow.com> your subdomain is hubot. Make a note of the subdomain.
+
+=back
+
+=head1 SEE ALSO
+
+=over
+
+=item L<https://github.com/37signals/campfire-api#authentication>
+
+=item L<https://github.com/github/hubot/wiki/Adapter:-Campfire>
+
+=back
+
+=head1 AUTHOR
+
+Hyungsuk Hong <hshong@perl.kr>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2012 by Hyungsuk Hong.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut

@@ -12,7 +12,7 @@ has 'data' => (
 
 sub save {
     my $self = shift;
-    $self->emit('save', $self->data);
+    $self->emit( 'save', $self->data );
 }
 
 sub close {
@@ -33,7 +33,7 @@ sub mergeData {
         $self->data->{$key} = $data->{$key};
     }
 
-    $self->emit('loaded', $self->data);
+    $self->emit( 'loaded', $self->data );
 }
 
 __PACKAGE__->meta->make_immutable;

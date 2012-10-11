@@ -26,21 +26,18 @@ has 'cv' => (
     lazy_build => 1,
 );
 
-has 'bot' => (
-    is => 'rw',
-);
+has 'bot' => ( is => 'rw', );
 
 has 'httpClient' => (
-    is => 'ro',
+    is      => 'ro',
     default => sub { LWP::UserAgent->new },
 );
 
-sub _build_cv  { AnyEvent->condvar }
+sub _build_cv { AnyEvent->condvar }
 
 sub send {
     my ( $self, $user, @strings ) = @_;
-    $self->bot->speak($user->{room}, encode_utf8($_))
-      for @strings;
+    $self->bot->speak( $user->{room}, encode_utf8($_) ) for @strings;
 }
 
 sub reply {
@@ -53,8 +50,8 @@ sub run {
     my $self = shift;
 
     my %options = (
-        token => $ENV{HUBOT_CAMPFIRE_TOKEN},
-        rooms => $ENV{HUBOT_CAMPFIRE_ROOMS},
+        token   => $ENV{HUBOT_CAMPFIRE_TOKEN},
+        rooms   => $ENV{HUBOT_CAMPFIRE_ROOMS},
         account => $ENV{HUBOT_CAMPFIRE_ACCOUNT},
     );
 
@@ -64,40 +61,37 @@ sub run {
     $bot->on(
         'join',
         sub {
-            my ($e, $data) = @_;
-            $self->receive(new Hubot::EnterMessage);
+            my ( $e, $data ) = @_;
+            $self->receive( new Hubot::EnterMessage );
         }
     );
 
     $bot->on(
         'message',
         sub {
-            my ($e, $data) = @_;
-            my $user = $self->userForId(
-                $data->{user_id},
-                {
-                    room => $data->{room_id},
-                }
-            );
+            my ( $e, $data ) = @_;
+            my $user =
+              $self->userForId( $data->{user_id},
+                { room => $data->{room_id}, } );
 
-            if ($user->{name} eq $user->{id}) {
+            if ( $user->{name} eq $user->{id} ) {
                 my $req = HTTP::Request->new(
                     GET => sprintf(
                         "https://%s.campfirenow.com/users/%s",
-                        $options{account},
-                        $user->{id}
+                        $options{account}, $user->{id}
                     ),
                 );
-                $req->header('Accept', 'application/json');
-                $req->header('Authorization', $bot->authorization);
+                $req->header( 'Accept',        'application/json' );
+                $req->header( 'Authorization', $bot->authorization );
                 my $res = $self->httpClient->request($req);
                 return unless $res->is_success;
 
                 my $userData;
                 try {
-                    $userData = decode_json($res->content);
-                } catch {
-                    $bot->emit('error', $_);
+                    $userData = decode_json( $res->content );
+                }
+                catch {
+                    $bot->emit( 'error', $_ );
                 };
 
                 $user->{name} = $userData->{user}{name};
@@ -115,7 +109,7 @@ sub run {
     $bot->on(
         'error',
         sub {
-            my ($e, $error) = @_;
+            my ( $e, $error ) = @_;
             print STDERR "$error\n";
         }
     );

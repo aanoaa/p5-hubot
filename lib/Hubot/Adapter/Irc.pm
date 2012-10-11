@@ -147,6 +147,12 @@ sub run {
     $self->cv->recv;
 }
 
+sub close {
+    my $self = shift;
+    $self->irc->disconnect;
+    $self->cv->send;
+}
+
 sub checkCanStart {
     my $self = shift;
 

@@ -1,7 +1,4 @@
 package Hubot::Robot;
-{
-    $Hubot::Robot::VERSION = '0.0.1';
-}
 
 use Moose;
 use namespace::autoclean;

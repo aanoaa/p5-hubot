@@ -52,7 +52,15 @@ $robot->run;
       HUBOT_IRC_SERVER='irc.myserver.com' \
       HUBOT_IRC_PORT=6667 \
       hubot -a irc
-    $ perldoc Hubot::Adapter::Irc    # for more irc env info
+
+    # campfire?
+    $ HUBOT_CAMPFIRE_TOKEN='xxxx' \
+      HUBOT_CAMPFIRE_ROOMS='1234' \
+      HUBOT_CAMPFIRE_ACCOUNT=myaccount \
+      hubot -a campfire
+
+    $ perldoc Hubot::Adapter::Irc
+    $ perldoc Hubot::Adapter::Campfire
 
 =head1 DESCRIPTION
 
@@ -65,6 +73,8 @@ C<hubot> is a Command Line Interface for L<Hubot>.
 =item L<Hubot>
 
 =item L<Hubot::Adapter::Irc>
+
+=item L<Hubot::Adapter::Campfire>
 
 =back
 

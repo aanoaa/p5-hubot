@@ -45,7 +45,7 @@ hubot - convenience command line interface L<Hubot::Robot>.
 =head1 SYNOPSIS
 
     $ hubot --help
-    $ echo '{"help"}' > ./hubot-scripts.json    # `hubot-scripts.json` is required.
+    $ echo '["help"]' > ./hubot-scripts.json    # `hubot-scripts.json` is required.
     $ hubot
     hubot> hubot help
     # hubot: help <command>

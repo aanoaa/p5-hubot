@@ -82,7 +82,7 @@ sub run {
                 );
                 $req->header( 'Accept',        'application/json' );
                 $req->header( 'Authorization', $bot->authorization );
-                my $res = $self->httpClient->request($req); # non-async
+                my $res = $self->httpClient->request($req);    # non-async
                 return unless $res->is_success;
 
                 my $userData;
@@ -117,7 +117,7 @@ sub run {
     $bot->on(
         'leave',
         sub {
-            $self->cv->send; # TODO: support multiple rooms `leave`
+            $self->cv->send;    # TODO: support multiple rooms `leave`
         }
     );
 

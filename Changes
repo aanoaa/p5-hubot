@@ -1,0 +1,6 @@
+go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
+
+0.0.2    Tue Oct 16 12:57:41 2012 KST
+    - describe pre-require modules
+    - add `Hubot::Scripts::roles` as built
+    - typo in `hubot` SYNOPSIS

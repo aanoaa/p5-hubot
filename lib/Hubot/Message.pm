@@ -57,7 +57,7 @@ use Moose;
 use namespace::autoclean;
 extends 'Hubot::Message';
 
-has 'message' => ( is => 'ro', isa => 'Str' );
+has 'message' => ( is => 'ro', isa => 'Hubot::Message' );
 
 __PACKAGE__->meta->make_immutable;
 

@@ -8,7 +8,7 @@ has 'robot' => (
 );
 
 has 'message' => (
-    is  => 'ro',
+    is  => 'rw',
     isa => 'Hubot::Message',
 );
 

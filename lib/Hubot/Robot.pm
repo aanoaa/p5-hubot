@@ -46,22 +46,6 @@ sub BUILD {
     $self->loadAdapter($self->adapter)
 }
 
-sub receive {
-    my ($self, $message) = @_;
-    my $results = [];
-    for my $listener ($self->listeners) {
-        eval $listener->call($message);
-        last if $message->done;
-        if ($@) {
-            print STDERR "Unable to call the listener: $@\n";
-            return 0;
-        }
-    }
-
-    # if message not instanceof CatchAllMessage and results.indexOf(true) is -1
-    #   @receive new CatchAllMessage(message)
-}
-
 sub loadAdapter {
     my ($self, $adapter) = @_;
     ## TODO: HUBOT_DEFAULT_ADAPTERS
@@ -226,6 +210,54 @@ sub respond {
         regex => $newRegex,
         callback => $callback
     ));
+}
+
+sub enter {
+    my ($self, $callback) = @_;
+    $self->addListener(Hubot::Listener->new(
+        robot => $self,
+        matcher => sub { ref(shift) eq 'Hubot::EnterMessage' ? 1 : () },
+        callback => $callback
+    ));
+}
+
+sub leave {
+    my ($self, $callback) = @_;
+    $self->addListener(Hubot::Listener->new(
+        robot => $self,
+        matcher => sub { ref(shift) eq 'Hubot::LeaveMessage' ? 1 : () },
+        callback => $callback
+    ));
+}
+
+sub catchAll {
+    my ($self, $callback) = @_;
+    $self->addListener(Hubot::Listener->new(
+        robot => $self,
+        matcher => sub { ref(shift) eq 'Hubot::CatchAllMessage' ? 1 : () },
+        callback => sub {
+            my $msg = shift;
+            $msg->message($msg->message->message);
+            $callback->($msg);
+        }
+    ));
+}
+
+sub receive {
+    my ($self, $message) = @_;
+    my $results = [];
+    for my $listener ($self->listeners) {
+        eval $listener->call($message);
+        last if $message->done;
+        if ($@) {
+            print STDERR "Unable to call the listener: $@\n";
+            return 0;
+        }
+    }
+
+    $self->receive(new Hubot::CatchAllMessage(
+        message => $message
+    )) if ref($message) ne 'Hubot::CatchAllMessage';
 }
 
 sub http { AnyEvent::HTTP::ScopedClient->new($_[1]) }

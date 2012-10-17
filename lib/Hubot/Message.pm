@@ -13,6 +13,20 @@ has 'done' => (
 );
 
 sub finish { shift->done(1) }
+sub TO_JSON {
+    my $self = shift;
+    return {
+        ## prvent recursive call
+        ## Hubot::UserTO_JSON -> Hubot::Message::TO_JSON -> Hubot::User::TO_JSON
+        user => {
+            name => $self->user->{name},
+            id => $self->user->{id},
+        },
+        done => $self->done,
+    };
+}
+
+__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -31,6 +45,14 @@ sub match {
     my ( $self, $regex ) = @_;
     return $self->text =~ m/$regex/;
 }
+
+override 'TO_JSON' => sub {
+    my $self = shift;
+    return {
+        %{ super() },
+        text => $self->text
+    };
+};
 
 __PACKAGE__->meta->make_immutable;
 

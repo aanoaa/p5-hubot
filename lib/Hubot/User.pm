@@ -8,6 +8,8 @@ sub new {
     bless $ref, $class;
 }
 
+sub TO_JSON { return { %{ shift() } } }
+
 1;
 
 =pod

@@ -62,15 +62,15 @@ sub run { shift->adapter->run }
 
 sub userForId {
     my ($self, $id, $options) = @_;
-    my $user = $self->brain->data->{users}{$id};
+    my $user = $self->brain->{data}{users}{$id};
     unless ($user) {
         $user = Hubot::User->new({ id => $id, %$options });
-        $self->brain->data->{users}{$id} = $user;
+        $self->brain->{data}{users}{$id} = $user;
     }
 
     my $options_room = $options->{room} || '';
     if ($options_room ne $user->{room}) {
-        $self->brain->data->{users}{$id} = $user;
+        $self->brain->{data}{users}{$id} = $user;
     }
 
     return $user;
@@ -79,10 +79,10 @@ sub userForId {
 sub userForName {
     my ($self, $name) = @_;
     my $result;
-    for my $k (keys %{ $self->brain->data->{users} }) {
-        my $userName = $self->brain->data->{users}{$k}{name};
+    for my $k (keys %{ $self->brain->{data}{users} }) {
+        my $userName = $self->brain->{data}{users}{$k}{name};
         if (lc $userName eq lc $name) {
-            $result = $self->brain->data->{users}{$k};
+            $result = $self->brain->{data}{users}{$k};
         }
     }
 
@@ -93,7 +93,7 @@ sub usersForFuzzyRawName {
     my ($self, $fuzzyName) = @_;
     my $lowerFuzzyName = lc $fuzzyName;
     my @users;
-    while (my ($key, $user) = each %{ $self->brain->data->{users} || {} }) {
+    while (my ($key, $user) = each %{ $self->brain->{data}{users} || {} }) {
         if (lc($user->{name}) =~ m/^$lowerFuzzyName/) {
             push @users, $user;
         }

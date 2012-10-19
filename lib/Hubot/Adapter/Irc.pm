@@ -36,7 +36,6 @@ sub join {
     $self->irc->send_srv( JOIN => $channel );
 }
 sub part       { }
-sub createUser { }
 sub kick       { }
 sub command    { }
 
@@ -100,24 +99,17 @@ sub run {
         join => sub {
             my ( $cl, $nick, $channel, $is_myself ) = @_;
             print "joined $channel\n";
-            $self->receive( new Hubot::EnterMessage );
+            my $user = $self->createUser($channel, $nick);
+            $self->receive(
+                new Hubot::EnterMessage(
+                    user => $user
+                )
+            );
         },
         publicmsg => sub {
             my ( $cl, $channel, $ircmsg ) = @_;
             my ( $nick, $msg ) = $self->parse_msg($ircmsg);
-            my $user = $self->userForName($nick);
-            unless ($user) {
-                my $id = time;
-                $id =~ s/\.//;
-                $user = $self->userForId(
-                    $id,
-                    {
-                        name => $nick,
-                        room => $channel,
-                    }
-                );
-            }
-
+            my $user = $self->createUser($channel, $nick);
             $self->receive(
                 new Hubot::TextMessage(
                     user => $user,
@@ -151,6 +143,24 @@ sub close {
     my $self = shift;
     $self->irc->disconnect;
     $self->cv->send;
+}
+
+sub createUser {
+    my ($self, $channel, $from) = @_;
+    my $user = $self->userForName($from);
+    unless ($user) {
+        my $id = time;
+        $id =~ s/\.//;
+        $user = $self->userForId(
+            $id,
+            {
+                name => $from,
+                room => $channel,
+            }
+        );
+    }
+
+    return $user;
 }
 
 sub checkCanStart {

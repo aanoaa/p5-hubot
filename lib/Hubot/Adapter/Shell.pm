@@ -26,7 +26,7 @@ has 'cv' => (
 
 sub _build_cv { AnyEvent->condvar }
 
-sub close { exit }
+sub close { shift->cv->send }
 
 sub send {
     my ( $self, $user, @strings ) = @_;
@@ -82,6 +82,7 @@ sub run {
     );
 
     $self->cv->recv;
+    exit;
 }
 
 __PACKAGE__->meta->make_immutable;

@@ -80,6 +80,12 @@ good choice for development.
 
     http://twitter.com/KBO_Scores/status/256376098764505088
 
+=item L<Hubot::Scripts::roles>
+
+    hubot: <user> is a <role>
+    hubot: who is <user>
+    hubot: <user> is not a <role>
+
 =back
 
 =head1 SEE ALSO

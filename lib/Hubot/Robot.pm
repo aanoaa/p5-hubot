@@ -69,7 +69,8 @@ sub userForId {
     }
 
     my $options_room = $options->{room} || '';
-    if ($options_room ne $user->{room}) {
+    if ($options_room && (!$user->{room} || $user->{room} ne $options_room)) {
+        $user = Hubot::User->new({ id => $id, %$options });
         $self->brain->{data}{users}{$id} = $user;
     }
 

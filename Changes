@@ -1,6 +1,11 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 
-0.0.3    Fri Oct 19 11:38:10 2012
+0.0.4    Tue Oct 23 17:00:27 2012 KST
+    - fix bug
+      - assing user to robot's brain for extend script
+      - maybe since now `cpan Hubot` is available (Hubot.pod -> Hubot.pm)
+
+0.0.3    Fri Oct 19 11:38:10 2012 KST
     - enhance JSON process
     - Implements $robot's `catchAll`, `enter`, `leave` methods
     - bug fix

@@ -1,3 +1,7 @@
+package Hubot;
+
+1;
+
 =pod
 
 =encoding utf-8

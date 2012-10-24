@@ -13,6 +13,7 @@ has 'done' => (
 );
 
 sub finish { shift->done(1) }
+
 sub TO_JSON {
     my $self = shift;
     return {
@@ -20,7 +21,7 @@ sub TO_JSON {
         ## Hubot::UserTO_JSON -> Hubot::Message::TO_JSON -> Hubot::User::TO_JSON
         user => {
             name => $self->user->{name},
-            id => $self->user->{id},
+            id   => $self->user->{id},
         },
         done => $self->done,
     };
@@ -48,10 +49,7 @@ sub match {
 
 override 'TO_JSON' => sub {
     my $self = shift;
-    return {
-        %{ super() },
-        text => $self->text
-    };
+    return { %{ super() }, text => $self->text };
 };
 
 __PACKAGE__->meta->make_immutable;

@@ -116,7 +116,7 @@ sub getAmbiguousUserText {
     return sprintf(
         "Be more specific, I know %d people named like that: %s",
         scalar @users,
-        join(', ', map { $_->{name} } @users)
+        join( ', ', map { $_->{name} } @users )
     );
 }
 

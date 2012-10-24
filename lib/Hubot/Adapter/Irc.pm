@@ -35,15 +35,15 @@ sub join {
     my ( $self, $channel ) = @_;
     $self->irc->send_srv( JOIN => $channel );
 }
-sub part       { }
-sub kick       { }
-sub command    { }
+sub part    { }
+sub kick    { }
+sub command { }
 
 sub parse_msg {
     my ( $self, $irc_msg ) = @_;
 
     my ($nickname) = $irc_msg->{prefix} =~ m/^([^!]+)/;
-    my $message = decode_utf8($irc_msg->{params}[1]);
+    my $message = decode_utf8( $irc_msg->{params}[1] );
     return ( $nickname, $message );
 }
 
@@ -99,17 +99,13 @@ sub run {
         join => sub {
             my ( $cl, $nick, $channel, $is_myself ) = @_;
             print "joined $channel\n";
-            my $user = $self->createUser($channel, $nick);
-            $self->receive(
-                new Hubot::EnterMessage(
-                    user => $user
-                )
-            );
+            my $user = $self->createUser( $channel, $nick );
+            $self->receive( new Hubot::EnterMessage( user => $user ) );
         },
         publicmsg => sub {
             my ( $cl, $channel, $ircmsg ) = @_;
             my ( $nick, $msg ) = $self->parse_msg($ircmsg);
-            my $user = $self->createUser($channel, $nick);
+            my $user = $self->createUser( $channel, $nick );
             $self->receive(
                 new Hubot::TextMessage(
                     user => $user,
@@ -146,7 +142,7 @@ sub close {
 }
 
 sub createUser {
-    my ($self, $channel, $from) = @_;
+    my ( $self, $channel, $from ) = @_;
     my $user = $self->userForName($from);
     unless ($user) {
         my $id = time;

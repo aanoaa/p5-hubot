@@ -114,11 +114,12 @@ sub run {
             );
         },
         privatemsg => sub {
-            my ($cl, $nick, $ircmsg) = @_;
-            my $msg = ($self->parse_msg($ircmsg))[1];
-            my ($channel) = $msg =~ m/^\#/ ? split / /, $msg : split /,/, $ENV{HUBOT_IRC_ROOMS};
+            my ( $cl, $nick, $ircmsg ) = @_;
+            my $msg = ( $self->parse_msg($ircmsg) )[1];
+            my ($channel) = $msg =~ m/^\#/ ? split / /, $msg : split /,/,
+              $ENV{HUBOT_IRC_ROOMS};
             $msg =~ s/^$channel\s*//;
-            my $user = $self->createUser($channel, $nick);
+            my $user = $self->createUser( $channel, $nick );
             $self->receive(
                 new Hubot::WhisperMessage(
                     user => $user,

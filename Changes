@@ -1,5 +1,8 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 
+0.0.6    Thu Oct 25 01:01:40 2012 KST
+    - add whisper feature for IRC adapter
+
 0.0.5    Wed Oct 24 18:58:04 2012 KST
     - fix bug
       - don't speak perl code when robot ambiguous users

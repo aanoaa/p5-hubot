@@ -6,6 +6,7 @@ has 'user' => (
     is  => 'ro',
     isa => 'Hubot::User',
 );
+
 has 'done' => (
     is      => 'rw',
     isa     => 'Bool',
@@ -71,6 +72,11 @@ extends 'Hubot::Message';
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+package Hubot::WhisperMessage;
+use Moose;
+use namespace::autoclean;
+extends 'Hubot::TextMessage';
 
 package Hubot::CatchAllMessage;
 use Moose;

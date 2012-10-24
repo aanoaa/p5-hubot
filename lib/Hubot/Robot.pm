@@ -231,6 +231,15 @@ sub leave {
     ));
 }
 
+sub whisper {
+    my ($self, $callback) = @_;
+    $self->addListener(Hubot::Listener->new(
+        robot => $self,
+        matcher => sub { ref(shift) eq 'Hubot::WhisperMessage' ? 1 : () },
+        callback => $callback
+    ));
+}
+
 sub catchAll {
     my ($self, $callback) = @_;
     $self->addListener(Hubot::Listener->new(

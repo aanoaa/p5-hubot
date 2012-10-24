@@ -1,5 +1,10 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 
+0.0.5    Wed Oct 24 18:58:04 2012 KST
+    - fix bug
+      - don't speak perl code when robot ambiguous users
+      - encode, decode utf8 on IO data
+
 0.0.4    Tue Oct 23 17:00:27 2012 KST
     - fix bug
       - assing user to robot's brain for extend script

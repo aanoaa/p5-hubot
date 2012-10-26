@@ -108,7 +108,7 @@ sub usersForFuzzyName {
     my @matchedUsers = $self->usersForFuzzyRawName($fuzzyName);
     my $lowerFuzzyName = lc $fuzzyName;
     for my $user (@matchedUsers) {
-        return $user if lc($user) eq $lowerFuzzyName;
+        return $user if lc($user->{name}) eq $lowerFuzzyName;
     }
 
     return @matchedUsers;

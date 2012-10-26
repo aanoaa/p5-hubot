@@ -124,6 +124,9 @@ sub loadHubotScripts {
     my ($self, $scripts) = @_;
     ## TODO: Debug Message
     # print "Loading hubot-scripts\n" if $ENV{DEBUG};
+    if (ref $scripts->[-1] eq 'HASH') {
+        $self->brain->{data}{config} = pop @$scripts;
+    }
     for my $script (@$scripts) {
         $self->loadFile($script);
     }

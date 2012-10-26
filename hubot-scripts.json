@@ -1,6 +1,11 @@
 [
+  // list of scripts to load.
   "help",
   "tweet",
   "ascii",
-  "roles"
+  "roles",
+  {
+    // detailed configurations here.
+    // only hashrefs as values are allowed here yet.
+  }
 ]

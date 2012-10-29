@@ -106,6 +106,7 @@ sub run {
             my ( $cl, $channel, $ircmsg ) = @_;
             my ( $nick, $msg ) = $self->parse_msg($ircmsg);
             my $user = $self->createUser( $channel, $nick );
+            $user->{room} = $channel if $channel =~ m/^#/;
             $self->receive(
                 new Hubot::TextMessage(
                     user => $user,

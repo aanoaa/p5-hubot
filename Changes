@@ -1,15 +1,20 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 
+0.0.7    Tue Oct 30 10:36:52 2012 KST
+    - bug fix
+      - matching user name correctly
+      - refresh event owners room for each publicmsg event in IRC Adapter
+
 0.0.6    Thu Oct 25 01:01:40 2012 KST
     - add whisper feature for IRC adapter
 
 0.0.5    Wed Oct 24 18:58:04 2012 KST
-    - fix bug
+    - bug fix
       - don't speak perl code when robot ambiguous users
       - encode, decode utf8 on IO data
 
 0.0.4    Tue Oct 23 17:00:27 2012 KST
-    - fix bug
+    - bug fix
       - assing user to robot's brain for extend script
       - maybe since now `cpan Hubot` is available (Hubot.pod -> Hubot.pm)
 

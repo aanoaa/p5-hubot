@@ -12,6 +12,8 @@ use Hubot::Brain;
 use Hubot::Listener;
 use Hubot::TextListener;
 
+our $TIMEZONE = 'local';
+
 has 'name' => ( is => 'rw', isa => 'Str' );
 has 'alias' => ( is => 'rw', isa => 'Str' );
 has 'adapter' => ( is => 'rw' );
@@ -124,6 +126,10 @@ sub loadHubotScripts {
     my ($self, $scripts) = @_;
     ## TODO: Debug Message
     # print "Loading hubot-scripts\n" if $ENV{DEBUG};
+    if (ref $scripts->[-1] eq 'HASH') {
+        my $config = $self->brain->{data}{config} = pop @$scripts;
+        $TIMEZONE = $config->{timezone} if defined $config->{timezone};
+    }
     for my $script (@$scripts) {
         $self->loadFile($script);
     }

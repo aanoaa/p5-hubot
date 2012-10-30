@@ -7,6 +7,12 @@ has 'user' => (
     isa => 'Hubot::User',
 );
 
+has 'datetime' => (
+    is  => 'ro',
+    isa => 'DateTime',
+    default => { DateTime->now( time_zone => $Hubot::Robot::TIMEZONE ) },
+);
+
 has 'done' => (
     is      => 'rw',
     isa     => 'Bool',

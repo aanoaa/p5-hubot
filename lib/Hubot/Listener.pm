@@ -2,7 +2,6 @@ package Hubot::Listener;
 use Moose;
 use namespace::autoclean;
 
-use Hubot::Robot;
 use Hubot::Response;
 
 has 'robot' => (

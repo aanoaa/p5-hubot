@@ -177,7 +177,10 @@ sub respond {
     ## TODO: $^ 에 따른 분기; perl version 에 따라서 Regex object 의 modifier 위치가 달라짐
     my $modifiers = '';
     my $modifiersLen = $index - 3;
-    $modifiers = substr $stringRegex, 3, $modifiersLen if $modifiersLen > 0;
+    if ($modifiersLen > 0 && length $stringRegex > 3) {
+        $modifiers = substr $stringRegex, 3, $modifiersLen
+    }
+
     if ($first eq '^') {
         print STDERR "Anchors don't work well with respond, perhaps you want to use 'hear'\n";
         print STDERR "The regex in question was $stringRegex\n";

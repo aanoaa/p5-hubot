@@ -1,11 +1,11 @@
-# perl5-hubot #
+# p5-hubot #
 
 Perl 5
 [AnyEvent](http://search.cpan.org/~mlehmann/AnyEvent-7.02/lib/AnyEvent.pm)
 based [hubot](https://github.com/github/hubot) reimplementation.
 
-![camel](http://st.pimg.net/perlweb/images/camel_head.v25e738a.png)
-![hubot](http://octodex.github.com/images/hubot.jpg)
+![perl5](http://news.mynavi.jp/news/2011/03/02/009/images/001l.jpg)
+![hubot](https://github-images.s3.amazonaws.com/blog/2011/hubot.png)
 
 ## Installation ##
 

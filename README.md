@@ -9,17 +9,17 @@ based [hubot](https://github.com/github/hubot) reimplementation.
 
 ## Installation ##
 
-- CPAN
+- [CPAN](http://search.cpan.org)
 
-    $ cpanm Hubot
-    $ hubot --help
+        $ cpanm Hubot
+        $ hubot --help
 
-- github
+- [github](https://github.com)
 
-    $ git clone git://github.com/aanoaa/p5-hubot.git
-    $ cd p5-hubot/
-    $ grep -Prho '^use +[^(?:Hubot)]([^ ;]+)' lib/ | perl -e 'while(<>) { $h{(split / /)[1]}++ } print keys %h' | cpanm
-    $ perl -Ilib bin/hubot
+        $ git clone git://github.com/aanoaa/p5-hubot.git
+        $ cd p5-hubot/
+        $ grep -Prho '^use +[^(?:Hubot)]([^ ;]+)' lib/ | perl -e 'while(<>) { $h{(split / /)[1]}++ } print keys %h' | cpanm
+        $ perl -Ilib bin/hubot
 
 ## Configuration ##
 

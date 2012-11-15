@@ -18,6 +18,12 @@ has 'cv' => (
     lazy_build => 1,
 );
 
+has 'interval' => (
+    is => 'rw',
+    isa => 'Int',
+    default => 1,
+);
+
 sub BUILD {
     my $self = shift;
     $self->robot->{sent} = [];
@@ -44,7 +50,7 @@ sub run {
     local $| = 1;
     my $w = AnyEvent->timer(
         after => 0,
-        interval => 1,
+        interval => $self->interval,
         cb =>
             sub {
                 my $text = shift @{ $self->robot->{receive} };

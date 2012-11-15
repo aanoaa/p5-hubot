@@ -15,7 +15,11 @@ sub load {
         sub {
             my $msg   = shift;
             my $bitly = $msg->match->[0];
-            if ( length $bitly > 50 ) {
+            if (
+                length $bitly > 50
+                && $ENV{HUBOT_BITLY_USERNAME}
+                && $ENV{HUBOT_BITLY_API_KEY}
+            ) {
                 my $uri = URI->new("http://api.bitly.com/v3/shorten");
                 $uri->query_form_hash(
                     login   => $ENV{HUBOT_BITLY_USERNAME},

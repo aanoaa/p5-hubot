@@ -1,5 +1,16 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 
+0.0.8    Thu Nov 15 18:21:55 2012 KST
+    - bug fix
+      - prevent cross reference between Modules
+      - check $stringRegex length before convert
+    - README - better look on github
+    - add Helper module for test
+    - add test file for 'roles' script
+    - add test for help script
+    - add test for shorten script
+    - add test file for 'tweet' script
+
 0.0.7    Tue Oct 30 10:36:52 2012 KST
     - bug fix
       - matching user name correctly

@@ -16,7 +16,7 @@ push @{ $robot->{receive} }, 'ascii hi';
 
 $robot->run;
 
-my ($got, $expect);
+my $got;
 $got = shift @{ $robot->{sent} };
 like("@$got", qr/ascii me/, 'correct help message');
 $got = shift @{ $robot->{sent} };

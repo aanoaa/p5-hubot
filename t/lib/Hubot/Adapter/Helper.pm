@@ -20,7 +20,6 @@ has 'cv' => (
 
 has 'interval' => (
     is => 'rw',
-    isa => 'Int',
     default => 1,
 );
 

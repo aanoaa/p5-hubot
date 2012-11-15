@@ -11,6 +11,7 @@ my $robot = Hubot::Robot->new({
 });
 
 $robot->loadHubotScripts(["help","roles"]);
+$robot->adapter->interval(0.2);
 $robot->userForId('misskim', {}); # for known user test
 
 push @{ $robot->{receive} }, (

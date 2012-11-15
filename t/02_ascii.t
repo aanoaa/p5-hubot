@@ -10,6 +10,7 @@ my $robot = Hubot::Robot->new({
 });
 
 $robot->loadHubotScripts(["help","ascii"]);
+$robot->adapter->interval(3);
 
 push @{ $robot->{receive} }, 'hubot help ascii';
 push @{ $robot->{receive} }, 'ascii hi';

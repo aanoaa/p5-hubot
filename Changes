@@ -10,6 +10,7 @@ go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues
     - add test for help script
     - add test for shorten script
     - add test file for 'tweet' script
+    - check ENV before using @shorten
 
 0.0.7    Tue Oct 30 10:36:52 2012 KST
     - bug fix

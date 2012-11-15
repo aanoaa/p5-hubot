@@ -40,13 +40,16 @@ sub reply {
 
 sub run {
     my $self = shift;
+
+    local $| = 1;
     my $w = AnyEvent->timer(
         after => 0,
         interval => 1,
         cb =>
             sub {
-                my $text = pop @{ $self->robot->{receive} };
-                return unless $text;
+                my $text = shift @{ $self->robot->{receive} };
+                return $self->cv->end unless $text;
+
                 $self->cv->begin;
                 my $user = $self->userForId(
                     1,
@@ -67,6 +70,7 @@ sub run {
             }
         );
 
+    $self->cv->begin;
     $self->cv->recv;
     # callback?
 }

@@ -19,18 +19,19 @@ has 'cv' => (
 );
 
 has 'interval' => (
-    is => 'rw',
+    is      => 'rw',
     default => 1,
 );
 
 sub BUILD {
     my $self = shift;
-    $self->robot->{sent} = [];
+    $self->robot->{sent}    = [];
     $self->robot->{receive} = [];
 }
 
 sub _build_cv { AnyEvent->condvar }
-sub close { shift->cv->send }
+sub close     { shift->cv->send }
+
 sub send {
     my ( $self, $user, @strings ) = @_;
     push @{ $self->robot->{sent} }, \@strings;
@@ -48,35 +49,35 @@ sub run {
 
     local $| = 1;
     my $w = AnyEvent->timer(
-        after => 0,
+        after    => 0,
         interval => $self->interval,
-        cb =>
-            sub {
-                my $text = shift @{ $self->robot->{receive} };
-                return $self->cv->end unless $text;
+        cb       => sub {
+            my $text = shift @{ $self->robot->{receive} };
+            return $self->cv->end unless $text;
 
-                $self->cv->begin;
-                my $user = $self->userForId(
-                    1,
+            $self->cv->begin;
+            my $user = $self->userForId(
+                1,
+                {
+                    name => 'helper',
+                    room => 'helper'
+                }
+            );
+
+            $self->receive(
+                new Hubot::TextMessage(
                     {
-                        name => 'helper',
-                        room => 'helper'
+                        user => $user,
+                        text => $text,
                     }
-                );
-
-                $self->receive(
-                    new Hubot::TextMessage(
-                        {
-                            user => $user,
-                            text => $text,
-                        }
-                    )
-                );
-            }
-        );
+                )
+            );
+        }
+    );
 
     $self->cv->begin;
     $self->cv->recv;
+
     # callback?
 }
 

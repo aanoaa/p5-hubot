@@ -1,5 +1,10 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 
+
+0.0.9    Fri Nov 16 17:11:14 2012 KST
+    - fix generate random number in Hubot::Response
+      for support googleImage script in Hubot::Scripts::Bundle
+
 0.0.8    Thu Nov 15 18:21:55 2012 KST
     - bug fix
       - prevent cross reference between Modules

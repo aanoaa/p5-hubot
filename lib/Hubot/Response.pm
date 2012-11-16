@@ -34,7 +34,7 @@ sub reply {
 
 sub random {
     my ( $self, @items ) = @_;
-    return $items[ srand( scalar(@items) ) ];
+    return $items[ rand( scalar(@items) ) ];
 }
 
 sub finish {

@@ -38,6 +38,10 @@ sub join {
 sub part    { }
 sub kick    { }
 sub command { }
+sub whois {
+    my ($self, $nick) = @_;
+    return $self->irc->nick_ident($nick);
+}
 
 sub parse_msg {
     my ( $self, $irc_msg ) = @_;
@@ -50,6 +54,12 @@ sub parse_msg {
 sub send {
     my ( $self, $user, @strings ) = @_;
     $self->irc->send_srv( 'PRIVMSG', $user->{room}, encode_utf8($_) )
+      for @strings;
+}
+
+sub whisper {
+    my ( $self, $user, $to, @strings ) = @_;
+    $self->irc->send_srv( 'PRIVMSG', $to->{name}, encode_utf8($_) )
       for @strings;
 }
 

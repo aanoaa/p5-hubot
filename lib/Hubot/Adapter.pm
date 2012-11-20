@@ -9,10 +9,11 @@ has 'robot' => (
     isa => 'Hubot::Robot'
 );
 
-sub send  { }
-sub reply { }
-sub run   { }
-sub close { }
+sub send    { }
+sub whisper { }
+sub reply   { }
+sub run     { }
+sub close   { }
 
 sub receive              { shift->robot->receive(@_) }
 sub users                { shift->robot->users }

@@ -22,6 +22,11 @@ sub send {
     $self->robot->adapter->send( $self->message->user, @strings );
 }
 
+sub whisper {
+    my ( $self, $to, @strings ) = @_;
+    $self->robot->adapter->whisper( $self->message->user, $to, @strings );
+}
+
 sub topic {
     my ( $self, @strings ) = @_;
     $self->robot->adapter->topic( $self->message->user, @strings );

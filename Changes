@@ -1,5 +1,6 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
-
+0.0.10   Wed Nov 21 01:04:18 2012 KST
+    - add whisper interface for IRC adapter
 
 0.0.9    Fri Nov 16 17:11:14 2012 KST
     - fix generate random number in Hubot::Response

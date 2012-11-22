@@ -150,6 +150,7 @@ sub run {
 
     $self->emit('connected');
     $self->cv->begin;
+    $self->irc->enable_ssl if $ENV{HUBOT_IRC_ENABLE_SSL};
     $self->irc->connect(
         $options{server},
         $options{port},

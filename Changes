@@ -1,5 +1,9 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
-0.0.11    Wed Nov 21 18:43:05 2012 KST
+
+0.1.1    Thu Nov 22 10:42:30 2012
+    - support HUBOT_IRC_ENABLE_SSL option for support ssl connecting
+
+0.1.0    Wed Nov 21 18:43:05 2012 KST
     - robot has rest after send a message line for prevent got a kick from IRC server
 
 0.0.10    Wed Nov 21 01:04:18 2012 KST

@@ -38,8 +38,9 @@ sub join {
 sub part    { }
 sub kick    { }
 sub command { }
+
 sub whois {
-    my ($self, $nick) = @_;
+    my ( $self, $nick ) = @_;
     return $self->irc->nick_ident($nick);
 }
 

@@ -9,6 +9,7 @@ my ($opt, $usage) = describe_options(
     "hubot %o <arg>",
     [ 'adapter|a=s', 'The Adapter to use', { default => 'shell' } ],
     [ 'name|n=s',    'The name of the robot in chat', { default => 'hubot' } ],
+    [ 'scripts|s=s',    'hubot-scripts.json file path' ],
     [ 'help',        'Display the help information' ],
 );
 
@@ -25,7 +26,7 @@ $robot->adapter->on(
     'connected',
     sub {
         my $cwd = cwd();
-        my $scriptsFile = "$cwd/hubot-scripts.json";
+        my $scriptsFile = $opt->{scripts} || "$cwd/hubot-scripts.json";
         if (-f $scriptsFile) {
             my $json = read_file($scriptsFile);
             my $scripts = decode_json($json);

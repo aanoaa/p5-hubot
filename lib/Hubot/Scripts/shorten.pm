@@ -41,18 +41,20 @@ sub load {
                     my ( $body, $hdr ) = @_;
                     return if ( !$body || !$hdr->{Status} =~ /^2/ );
 
-                    # content-type
+                    ## content-type
                     my @ct = split( /\s*,\s*/, $hdr->{'content-type'} );
                     if ( grep { /^image\/.+$/i } @ct || grep { !/text/i } @ct )
                     {
                         return $msg->send("[$ct[0]] - $bitly");
                     }
 
-                    # charset
+                    ### charset
+                    ### <meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+                    ### [FILTER] - <script type="text/javascript" src="http://news.chosun.com/dhtm/js/gnb_news_2011.js" charset="euc-kr"></script>
+                    $body =~ s{\r\n}{\n}g;
+                    my @charset_lines = grep { $_ !~ /script/ } grep { /charset/ } split /\n/, $body;
                     my $charset;
-                    if ( $body =~
-                        /charset=(?:'([^']+?)'|"([^"]+?)"|([a-zA-Z0-9_-]+)\b)/ )
-                    {
+                    if ( "@{[ @charset_lines ]}" =~ /charset=(?:'([^']+?)'|"([^"]+?)"|([a-zA-Z0-9_-]+)\b)/ ) {
                         $charset = lc( $1 || $2 || $3 );
                     }
 

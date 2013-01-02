@@ -14,6 +14,7 @@ sub whisper { }
 sub reply   { }
 sub run     { }
 sub close   { }
+sub exist   { }
 
 sub receive              { shift->robot->receive(@_) }
 sub users                { shift->robot->users }

@@ -41,6 +41,11 @@ sub reply {
     $self->send( $user, @strings );
 }
 
+sub exist {
+    my ( $self, $user, $nick ) = @_;
+    return $self->userForName($nick);
+}
+
 sub run {
     my $self = shift;
 

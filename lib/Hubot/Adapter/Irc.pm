@@ -172,7 +172,7 @@ sub close {
 
 sub exist {
     my ( $self, $user, $nick ) = @_;
-    return $self->findUser($user->{room}, $nick);
+    return $self->findUser( $user->{room}, $nick );
 }
 
 sub createUser {
@@ -195,7 +195,7 @@ sub createUser {
 
 sub findUser {
     my ( $self, $channel, $nick ) = @_;
-    return $self->irc->nick_modes($channel, $nick);
+    return $self->irc->nick_modes( $channel, $nick );
 }
 
 sub checkCanStart {

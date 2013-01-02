@@ -52,6 +52,11 @@ sub http {
     return $self->robot->http($url);
 }
 
+sub exist {
+    my ( $self, $nick ) = @_;
+    $self->robot->adapter->exist( $self->message->user, $nick );
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;

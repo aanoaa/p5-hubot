@@ -170,6 +170,11 @@ sub close {
     $self->cv->send;
 }
 
+sub exist {
+    my ( $self, $user, $nick ) = @_;
+    return $self->findUser($user->{room}, $nick);
+}
+
 sub createUser {
     my ( $self, $channel, $from ) = @_;
     my $user = $self->userForName($from);
@@ -186,6 +191,11 @@ sub createUser {
     }
 
     return $user;
+}
+
+sub findUser {
+    my ( $self, $channel, $nick ) = @_;
+    return $self->irc->nick_modes($channel, $nick);
 }
 
 sub checkCanStart {

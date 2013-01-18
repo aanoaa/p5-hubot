@@ -41,6 +41,12 @@ if "shorten" is appear than "tweet", C<http://twitter.com/E<lt>usernameE<gt>/sta
 the secret is behind of `tweet` script.
 actually, L<Hubot::Message> C<finish> method.
 
+if F<hubot-scripts.json> is not exist, built-in scripts
+
+"help", "tweet", "ascii", "roles"
+
+are loaded automatically.
+
 =head1 ADAPTERS
 
 choose the adapter at runtime.

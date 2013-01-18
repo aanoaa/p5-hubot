@@ -1,5 +1,8 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 
+0.1.4    Fri Jan 18 10:39:59 2013 KST
+    - built-in script load for newbie if there is no exist `hubot-scripts.json`
+
 0.1.3    Thu Jan  3 04:30:14 2013 KST
     - [shorten] pickup better charset in $body
     - add $adapter->exist interface and implemets each adapters

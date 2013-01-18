@@ -31,6 +31,9 @@ $robot->adapter->on(
             my $json = read_file($scriptsFile);
             my $scripts = decode_json($json);
             $robot->loadHubotScripts($scripts);
+        } else {
+            print "load built-in scripts\n";
+            $robot->loadHubotScripts(['help','tweet','ascii','roles']);
         }
     }
 );

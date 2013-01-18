@@ -1,5 +1,8 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 
+0.1.5    Fri Jan 18 10:48:49 2013 KST
+    - fix https://rt.cpan.org/Public/Bug/Display.html?id=81555
+
 0.1.4    Fri Jan 18 10:39:59 2013 KST
     - built-in script load for newbie if there is no exist `hubot-scripts.json`
 

@@ -1,5 +1,9 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 
+0.1.6    Wed Jan 30 12:19:11 2013 KST
+    - GH#32 add several IRC connecting options (thanks @yuni)
+    - GH#33 check pkg before using `$irc->enable_ssl` (thanks @yuni)
+
 0.1.5    Fri Jan 18 10:48:49 2013 KST
     - fix https://rt.cpan.org/Public/Bug/Display.html?id=81555
 

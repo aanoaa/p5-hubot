@@ -142,7 +142,14 @@ sub run {
 
     $self->emit('connected');
     $self->cv->begin;
-    $self->irc->enable_ssl if $ENV{HUBOT_IRC_ENABLE_SSL};
+    if ($ENV{HUBOT_IRC_ENABLE_SSL}) {
+        eval "require Net::SSLeay; 1";
+        if ($@) {
+            die "HUBOT_IRC_ENABLE_SSL requires `Net::SSLeay`: $@\n";
+        } else {
+            $self->irc->enable_ssl;
+        }
+    }
     $self->irc->connect(
         $options{server},
         $options{port},
@@ -283,6 +290,8 @@ Your realname on IRC server.
 =item HUBOT_IRC_ENABLE_SSL
 
 using L<AnyEvent::IRC::Connection> C<enable_ssl> at connect.
+
+requires L<Net::SSLeay>.
 
 =back
 

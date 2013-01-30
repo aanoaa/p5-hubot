@@ -84,7 +84,6 @@ sub run {
         server   => $ENV{HUBOT_IRC_SERVER},
         user     => $ENV{HUBOT_IRC_USER},
         password => $ENV{HUBOT_IRC_PASSWORD},
-        nickpass => $ENV{HUBOT_IRC_NICKSERV_PASSWORD},
         realname => $ENV{HUBOT_IRC_REALNAME},
     );
 
@@ -278,10 +277,6 @@ This is the optional username of the IRC server you want your hubot to connect t
 =item HUBOT_IRC_PASSWORD
 
 This is the optional password of the IRC server you want your hubot to connect to. If the IRC server doesn't require a password, this can be omitted. Make a note of it if required.
-
-=item HUBOT_IRC_NICKSERV_PASSWORD
-
-This is the optional Nickserv password if your hubot is using a nick registered with Nickserv on the IRC server. Make a note of it if required.
 
 =item HUBOT_IRC_REALNAME
 

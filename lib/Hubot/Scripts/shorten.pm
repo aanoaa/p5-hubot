@@ -73,6 +73,7 @@ sub load {
                         }
                     }
 
+                    $charset = 'euckr' if $charset =~ m/ksc5601/i;
                     eval { $body = decode( $charset, $body ) };
                     if ($@) {
                         return $msg->send("[$@] - $bitly");

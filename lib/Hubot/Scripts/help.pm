@@ -8,20 +8,28 @@ sub load {
         qr/help\s*(.*)?$/i,
         sub {
             my $msg  = shift;              # Hubot::Response
-            my @cmds = $robot->commands;
+            my @helps = $robot->helps;
 
             my $robotName = $robot->name;
             unless ($robotName =~ m/^hubot$/) {
-                map { s/hubot/$robotName/ig } @cmds;
+                map { s/hubot/$robotName/ig } @helps;
             }
 
             if ( $msg->match->[0] ) {
                 my $regex = $msg->match->[0];
-                @cmds = grep { $_ =~ /$regex/i } @cmds;
+                @helps = grep { $_ =~ /$regex/i } @helps;
             }
 
-            map { s/^/\# / } @cmds;
-            $msg->send(@cmds);
+            map { s/^/\# / } @helps;
+            $msg->send(@helps);
+        }
+    );
+
+    $robot->respond(
+        qr/commands? *$/i,
+        sub {
+            my $msg = shift;
+            $msg->send(join(', ', $robot->commands));
         }
     );
 }
@@ -38,6 +46,7 @@ Hubot::Scripts::help
 
 =head1 SYNOPSIS
 
+    hubot commands - Displays all commands at oneline
     hubot help - Displays all of the help commands that Hubot knows about
     hubot help <query> - Displays all help commands that match <query>
 

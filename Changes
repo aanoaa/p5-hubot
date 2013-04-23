@@ -1,5 +1,10 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 
+0.1.7    Tue Apr 23 20:23:58 2013 KST
+    - delete unused irc connect option and doc
+    - [shortcut] replacement charset to 'euckr' instead of 'ksc5601' # WTF
+    - [help] COMMAND `hubot commands` is available
+
 0.1.6    Wed Jan 30 12:19:11 2013 KST
     - GH#32 add several IRC connecting options (thanks @yuni)
     - GH#33 check pkg before using `$irc->enable_ssl` (thanks @yuni)

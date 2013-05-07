@@ -1,5 +1,8 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 
+0.1.8    Tue May  7 13:46:30 2013 KST
+    - HOTFIX fix bad test plan
+
 0.1.7    Tue Apr 23 20:23:58 2013 KST
     - delete unused irc connect option and doc
     - [shortcut] replacement charset to 'euckr' instead of 'ksc5601' # WTF

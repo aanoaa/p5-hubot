@@ -29,7 +29,7 @@ $got = shift @{ $robot->{sent} };
 ok( "@$got", 'containing help messages' );
 
 SKIP: {
-    skip "ENV [HUBOT_BITLY_USERNAME] and [HUBOT_BITLY_API_KEY] are required", 5
+    skip "ENV [HUBOT_BITLY_USERNAME] and [HUBOT_BITLY_API_KEY] are required", 6
       if !$ENV{HUBOT_BITLY_USERNAME}
       or !$ENV{HUBOT_BITLY_API_KEY};
     $got = shift @{ $robot->{sent} } || [];

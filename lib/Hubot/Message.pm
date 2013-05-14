@@ -78,6 +78,15 @@ use Moose;
 use namespace::autoclean;
 extends 'Hubot::TextMessage';
 
+1;
+
+package Hubot::NoticeMessage;
+use Moose;
+use namespace::autoclean;
+extends 'Hubot::TextMessage';
+
+1;
+
 package Hubot::CatchAllMessage;
 use Moose;
 use namespace::autoclean;

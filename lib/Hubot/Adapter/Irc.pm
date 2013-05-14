@@ -155,7 +155,25 @@ sub run {
         },
         quit => sub {
             my ( $nick, $msg ) = @_;
-        }
+        },
+        irc_330 => sub {
+            ## 330 is RPL_WHOWAS_TIME
+            my ($cl, $ircmsg) = @_;
+
+            my $user = $self->createUser( '', '*' );
+            $self->receive(
+                new Hubot::NoticeMessage(
+                    user => $user,
+                    text => sprintf("%s %s %s", @{ $ircmsg->{params} }[1,3,2]),
+                )
+            );
+        },
+        irc_mode => sub {
+            my ($cl, $ircmsg) = @_;
+            my ($channel, $mode, $target) = @{ $ircmsg->{params} };
+
+            $self->robot->mode($mode || '') if $target eq $self->robot->name;
+        },
     );
 
     $self->emit('connected');

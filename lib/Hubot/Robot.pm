@@ -14,6 +14,7 @@ use Hubot::TextListener;
 
 has 'name' => ( is => 'rw', isa => 'Str' );
 has 'alias' => ( is => 'rw', isa => 'Str' );
+has 'mode' => ( is => 'rw', isa => 'Str', default => '' );
 has 'adapter' => ( is => 'rw' );
 has 'brain' => (
     is => 'ro',

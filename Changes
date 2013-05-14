@@ -1,5 +1,11 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 
+0.1.9    Tue May 14 14:06:54 2013 KST
+    - robot can adding callback for `notice` like `hear`
+    - support NickServ identify
+    - catch `330` and `MODE` COMMANDS in Irc Adapter
+    - missing meta->make_immutable
+
 0.1.8    Tue May  7 13:46:30 2013 KST
     - HOTFIX fix bad test plan
 

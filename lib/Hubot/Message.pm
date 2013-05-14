@@ -77,6 +77,7 @@ package Hubot::WhisperMessage;
 use Moose;
 use namespace::autoclean;
 extends 'Hubot::TextMessage';
+__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -84,6 +85,7 @@ package Hubot::NoticeMessage;
 use Moose;
 use namespace::autoclean;
 extends 'Hubot::TextMessage';
+__PACKAGE__->meta->make_immutable;
 
 1;
 

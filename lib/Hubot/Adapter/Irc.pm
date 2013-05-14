@@ -78,24 +78,31 @@ sub run {
     $self->checkCanStart;
 
     my %options = (
-        nick     => $ENV{HUBOT_IRC_NICK} || $self->robot->name,
-        port     => $ENV{HUBOT_IRC_PORT} || 6667,
-        rooms    => [ split( /,/, $ENV{HUBOT_IRC_ROOMS} ) ],
-        server   => $ENV{HUBOT_IRC_SERVER},
-        user     => $ENV{HUBOT_IRC_USER},
-        password => $ENV{HUBOT_IRC_PASSWORD},
-        realname => $ENV{HUBOT_IRC_REALNAME},
+        nick       => $ENV{HUBOT_IRC_NICK} || $self->robot->name,
+        port       => $ENV{HUBOT_IRC_PORT} || 6667,
+        rooms      => [ split( /,/, $ENV{HUBOT_IRC_ROOMS} ) ],
+        server     => $ENV{HUBOT_IRC_SERVER},
+        user       => $ENV{HUBOT_IRC_USER},
+        password   => $ENV{HUBOT_IRC_PASSWORD},
+        realname   => $ENV{HUBOT_IRC_REALNAME},
+        nickserv   => $ENV{HUBOT_IRC_NICKSERV} || 'NickServ',
+        nickservpw => $ENV{HUBOT_IRC_NICKSERV_PASSWORD},
     );
 
     $self->robot->name( $options{nick} );
 
-    ## TODO: research node irc.Client
     $self->irc->reg_cb(
         connect => sub {
             my ( $con, $err ) = @_;
 
-            # join rooms
-            $self->join($_) for @{ $options{rooms} };
+            if (defined $options{nickservpw}) {
+                $self->irc->send_srv(
+                    'PRIVMSG' => $options{nickserv},
+                    "identify $options{nickservpw}"
+                );
+            } else {
+                $self->join($_) for @{ $options{rooms} };
+            }
         },
         registered => sub {
         },
@@ -110,8 +117,11 @@ sub run {
             my ( $nick, $msg ) = $self->parse_msg($ircmsg);
             my $user = $self->createUser( $channel, $nick );
             $user->{room} = $channel if $channel =~ m/^#/;
+
+            my $is_notice = $ircmsg->{command} eq 'NOTICE';
+            my $class = $is_notice ? 'Hubot::NoticeMessage' : 'Hubot::TextMessage';
             $self->receive(
-                new Hubot::TextMessage(
+                $class->new(
                     user => $user,
                     text => $msg,
                 )
@@ -119,13 +129,22 @@ sub run {
         },
         privatemsg => sub {
             my ( $cl, $nick, $ircmsg ) = @_;
-            my $msg = ( $self->parse_msg($ircmsg) )[1];
-            my ($channel) = $msg =~ m/^\#/ ? split / /, $msg : split /,/,
-              $ENV{HUBOT_IRC_ROOMS};
+            my ( $from, $msg ) = $self->parse_msg($ircmsg);
+            my ( $channel ) = $msg =~ m/^\#/ ? split / /, $msg : '';
             $msg =~ s/^$channel\s*//;
-            my $user = $self->createUser( $channel, $nick );
+
+            my $is_notice = $ircmsg->{command} eq 'NOTICE';
+
+            # -NickServ- You are now identified for <nick>.
+            if ($is_notice && $from eq $options{nickserv} && $msg =~ /identified/) {
+                $self->join($_) for @{ $options{rooms} };
+                return;
+            }
+
+            my $class = $is_notice ? 'Hubot::NoticeMessage' : 'Hubot::WhisperMessage';
+            my $user = $self->createUser( $channel, $from );
             $self->receive(
-                new Hubot::WhisperMessage(
+                $class->new(
                     user => $user,
                     text => $msg,
                 )

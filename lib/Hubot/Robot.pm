@@ -256,6 +256,15 @@ sub whisper {
     ));
 }
 
+sub notice {
+    my ($self, $callback) = @_;
+    $self->addListener(Hubot::Listener->new(
+        robot => $self,
+        matcher => sub { ref(shift) eq 'Hubot::NoticeMessage' ? 1 : () },
+        callback => $callback
+    ));
+}
+
 sub catchAll {
     my ($self, $callback) = @_;
     $self->addListener(Hubot::Listener->new(

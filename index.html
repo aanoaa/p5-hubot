@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="P5-hubot : hubot perl port" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>P5-hubot</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/aanoaa/p5-hubot">View on GitHub</a>
+
+          <h1 id="project_title">P5-hubot</h1>
+          <h2 id="project_tagline">hubot perl port</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/aanoaa/p5-hubot/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/aanoaa/p5-hubot/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="p5-hubot" class="anchor" href="#p5-hubot"><span class="octicon octicon-link"></span></a>p5-hubot</h1>
+
+<p>Perl 5
+<a href="http://search.cpan.org/%7Emlehmann/AnyEvent-7.02/lib/AnyEvent.pm">AnyEvent</a>
+based <a href="https://github.com/github/hubot">hubot</a> reimplementation.</p>
+
+<p><img src="http://news.mynavi.jp/news/2011/03/02/009/images/001l.jpg" alt="perl5"><img src="https://github-images.s3.amazonaws.com/blog/2011/hubot.png" alt="hubot"></p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<ul>
+<li>
+<p><a href="http://search.cpan.org">CPAN</a></p>
+
+<pre><code>$ cpanm Hubot
+$ hubot --help
+</code></pre>
+</li>
+<li>
+<p><a href="https://github.com">github</a></p>
+
+<pre><code>$ git clone git://github.com/aanoaa/p5-hubot.git
+$ cd p5-hubot/
+$ grep -Prho '^use +[^(?:Hubot)]([^ ;]+)' lib/ | perl -e 'while(&lt;&gt;) { $h{(split / /)[1]}++ } print keys %h' | cpanm
+$ perl -Ilib bin/hubot
+</code></pre>
+</li>
+</ul><h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>Checkout each documentation what you will use for.
+and describe each script name to <code>hubot-scripts.json</code></p>
+
+<pre><code>$ perldoc Hubot::Scripts::help
+$ perldoc lib/Hubot/Scripts/help.pm
+</code></pre>
+
+<p><code>hubot-scripts.json</code></p>
+
+<pre><code>[
+  "help"
+]
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">P5-hubot maintained by <a href="https://github.com/aanoaa">aanoaa</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

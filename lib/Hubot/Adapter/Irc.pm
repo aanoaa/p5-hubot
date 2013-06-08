@@ -105,11 +105,9 @@ sub run {
                 $self->join($_) for @{ $options{rooms} };
             }
         },
-        registered => sub {
-        },
         join => sub {
             my ( $cl, $nick, $channel, $is_myself ) = @_;
-            print "joined $channel\n";
+            print "$nick joined $channel\n";
             my $user = $self->createUser( $channel, $nick );
             $self->receive( new Hubot::EnterMessage( user => $user ) );
         },
@@ -159,10 +157,21 @@ sub run {
             );
         },
         part => sub {
-            my ( $nick, $channel, $is_myself, $msg ) = @_;
+            my ( $cl, $nick, $channel, $is_myself, $msg ) = @_;
+
+            print "$nick leaves $channel: $msg\n";
+            my $user = $self->createUser( $channel, $nick );
+            $self->receive(
+                new Hubot::LeaveMessage( user => $user, text => $msg ) );
         },
         quit => sub {
-            my ( $nick, $msg ) = @_;
+            my ( $cl, $nick, $msg ) = @_;
+
+            print "$nick quit: $msg\n";
+            my $user = $self->createUser( '', $nick )
+                ;    # room is empty, maybe raise a error case.
+            $self->receive(
+                new Hubot::LeaveMessage( user => $user, text => $msg ) );
         },
         irc_330 => sub {
             ## 330 is RPL_WHOWAS_TIME

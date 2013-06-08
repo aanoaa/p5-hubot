@@ -63,7 +63,7 @@ sub send {
 sub whisper {
     my ( $self, $user, $to, @strings ) = @_;
     $self->irc->send_srv( 'PRIVMSG', $to->{name}, encode_utf8($_) )
-      for @strings;
+        for @strings;
 }
 
 sub reply {
@@ -78,14 +78,14 @@ sub run {
     $self->checkCanStart;
 
     my %options = (
-        nick       => $ENV{HUBOT_IRC_NICK} || $self->robot->name,
-        port       => $ENV{HUBOT_IRC_PORT} || 6667,
-        rooms      => [ split( /,/, $ENV{HUBOT_IRC_ROOMS} ) ],
-        server     => $ENV{HUBOT_IRC_SERVER},
-        user       => $ENV{HUBOT_IRC_USER},
-        password   => $ENV{HUBOT_IRC_PASSWORD},
-        realname   => $ENV{HUBOT_IRC_REALNAME},
-        nickserv   => $ENV{HUBOT_IRC_NICKSERV} || 'NickServ',
+        nick => $ENV{HUBOT_IRC_NICK} || $self->robot->name,
+        port => $ENV{HUBOT_IRC_PORT} || 6667,
+        rooms    => [ split( /,/, $ENV{HUBOT_IRC_ROOMS} ) ],
+        server   => $ENV{HUBOT_IRC_SERVER},
+        user     => $ENV{HUBOT_IRC_USER},
+        password => $ENV{HUBOT_IRC_PASSWORD},
+        realname => $ENV{HUBOT_IRC_REALNAME},
+        nickserv => $ENV{HUBOT_IRC_NICKSERV} || 'NickServ',
         nickservpw => $ENV{HUBOT_IRC_NICKSERV_PASSWORD},
     );
 
@@ -95,12 +95,13 @@ sub run {
         connect => sub {
             my ( $con, $err ) = @_;
 
-            if (defined $options{nickservpw}) {
+            if ( defined $options{nickservpw} ) {
                 $self->irc->send_srv(
                     'PRIVMSG' => $options{nickserv},
                     "identify $options{nickservpw}"
                 );
-            } else {
+            }
+            else {
                 $self->join($_) for @{ $options{rooms} };
             }
         },
@@ -119,7 +120,8 @@ sub run {
             $user->{room} = $channel if $channel =~ m/^#/;
 
             my $is_notice = $ircmsg->{command} eq 'NOTICE';
-            my $class = $is_notice ? 'Hubot::NoticeMessage' : 'Hubot::TextMessage';
+            my $class
+                = $is_notice ? 'Hubot::NoticeMessage' : 'Hubot::TextMessage';
             $self->receive(
                 $class->new(
                     user => $user,
@@ -130,18 +132,24 @@ sub run {
         privatemsg => sub {
             my ( $cl, $nick, $ircmsg ) = @_;
             my ( $from, $msg ) = $self->parse_msg($ircmsg);
-            my ( $channel ) = $msg =~ m/^\#/ ? split / /, $msg : '';
+            my ($channel) = $msg =~ m/^\#/ ? split / /, $msg : '';
             $msg =~ s/^$channel\s*//;
 
             my $is_notice = $ircmsg->{command} eq 'NOTICE';
 
             # -NickServ- You are now identified for <nick>.
-            if ($is_notice && $from eq $options{nickserv} && $msg =~ /identified/) {
+            if (   $is_notice
+                && $from eq $options{nickserv}
+                && $msg =~ /identified/ )
+            {
                 $self->join($_) for @{ $options{rooms} };
                 return;
             }
 
-            my $class = $is_notice ? 'Hubot::NoticeMessage' : 'Hubot::WhisperMessage';
+            my $class
+                = $is_notice
+                ? 'Hubot::NoticeMessage'
+                : 'Hubot::WhisperMessage';
             my $user = $self->createUser( $channel, $from );
             $self->receive(
                 $class->new(
@@ -158,43 +166,45 @@ sub run {
         },
         irc_330 => sub {
             ## 330 is RPL_WHOWAS_TIME
-            my ($cl, $ircmsg) = @_;
+            my ( $cl, $ircmsg ) = @_;
 
             my $user = $self->createUser( '', '*' );
             $self->receive(
                 new Hubot::NoticeMessage(
                     user => $user,
-                    text => sprintf("%s %s %s", @{ $ircmsg->{params} }[1,3,2]),
+                    text => sprintf( "%s %s %s",
+                        @{ $ircmsg->{params} }[ 1, 3, 2 ] ),
                 )
             );
         },
         irc_mode => sub {
-            my ($cl, $ircmsg) = @_;
-            my ($channel, $mode, $target) = @{ $ircmsg->{params} };
+            my ( $cl, $ircmsg ) = @_;
+            my ( $channel, $mode, $target ) = @{ $ircmsg->{params} };
 
-            $self->robot->mode($mode || '') if $target eq $self->robot->name;
+            $self->robot->mode( $mode || '' )
+                if $target eq $self->robot->name;
         },
     );
 
     $self->emit('connected');
     $self->cv->begin;
-    if ($ENV{HUBOT_IRC_ENABLE_SSL}) {
+    if ( $ENV{HUBOT_IRC_ENABLE_SSL} ) {
         eval "require Net::SSLeay; 1";
         if ($@) {
             die "HUBOT_IRC_ENABLE_SSL requires `Net::SSLeay`: $@\n";
-        } else {
+        }
+        else {
             $self->irc->enable_ssl;
         }
     }
     $self->irc->connect(
         $options{server},
         $options{port},
-        {
-            nick     => $options{nick},
+        {   nick     => $options{nick},
             user     => $options{user},
             real     => $options{realname},
             password => $options{password},
-            timeout  => 10, # wait 10 seconds
+            timeout  => 10,                   # wait 10 seconds
         }
     );
 
@@ -220,8 +230,7 @@ sub createUser {
         $id =~ s/\.//;
         $user = $self->userForId(
             $id,
-            {
-                name => $from,
+            {   name => $from,
                 room => $channel,
             }
         );
@@ -241,17 +250,17 @@ sub checkCanStart {
     if ( !$ENV{HUBOT_IRC_NICK} && !$self->robot->name ) {
         ## use die?
         print STDERR
-          "HUBOT_IRC_NICK is not defined, try: export HUBOT_IRC_NICK='mybot'\n";
+            "HUBOT_IRC_NICK is not defined, try: export HUBOT_IRC_NICK='mybot'\n";
         exit(2);    # TODO: research standard exit value
     }
     elsif ( !$ENV{HUBOT_IRC_ROOMS} ) {
         print STDERR
-          "HUBOT_IRC_ROOMS is not defined, try: export HUBOT_IRC_ROOMS='#myroom'\n";
+            "HUBOT_IRC_ROOMS is not defined, try: export HUBOT_IRC_ROOMS='#myroom'\n";
         exit(2);
     }
     elsif ( !$ENV{HUBOT_IRC_SERVER} ) {
         print STDERR
-          "HUBOT_IRC_SERVER is not defined, try: export HUBOT_IRC_SERVER='irc.myserver.com'\n";
+            "HUBOT_IRC_SERVER is not defined, try: export HUBOT_IRC_SERVER='irc.myserver.com'\n";
         exit(2);
     }
 }

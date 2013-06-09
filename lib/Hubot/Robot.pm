@@ -5,6 +5,7 @@ use namespace::autoclean;
 
 use Pod::Usage;
 
+use AnyEvent;
 use AnyEvent::HTTP::ScopedClient;
 
 use Hubot::User;
@@ -52,9 +53,30 @@ has '_listeners' => (
     }
 );
 
+## Ping Watcher
+has 'pw' => ( is => 'rw' );
+
 sub BUILD {
     my $self = shift;
+
+    $self->setupHerokuPing;
     $self->loadAdapter( $self->adapter );
+}
+
+sub setupHerokuPing {
+    my $self = shift;
+
+    my $herokuUrl = $ENV{HEROKU_URL} || return;
+    $herokuUrl =~ s{/?$}{/hubot/ping};
+
+    $self->pw(
+        AE::timer 0,
+        1200000,
+        sub {
+            AnyEvent::HTTP::ScopedClient->new($herokuUrl)
+                ->post( sub { print "Keep alive ping!\n" if $ENV{DEBUG} } );
+        }
+    );
 }
 
 sub loadAdapter {

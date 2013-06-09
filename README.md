@@ -26,11 +26,6 @@ based [hubot](https://github.com/github/hubot) reimplementation.
 Checkout each documentation what you will use for.
 and describe each script name to `hubot-scripts.json`
 
-    $ perldoc Hubot::Scripts::help
-    $ perldoc lib/Hubot/Scripts/help.pm
+## Deploy onto heroku ##
 
-`hubot-scripts.json`
-
-    [
-      "help"
-    ]
+    https://github.com/aanoaa/heroku-buildpack-perl

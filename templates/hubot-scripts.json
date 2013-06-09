@@ -2,5 +2,9 @@
   "help",
   "tweet",
   "ascii",
-  "roles"
+  "roles",
+  "ping",
+  "uptime",
+  "dice",
+  "eval"
 ]

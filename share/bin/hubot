@@ -1,6 +1,5 @@
 #!/usr/bin/env perl
 use Hubot::Robot;
-use Hubot::Creator;
 use Cwd 'cwd';
 use File::Slurp qw/read_file/;
 use JSON::XS;
@@ -18,7 +17,7 @@ my ( $opt, $usage ) = describe_options(
 print( $usage->text ), exit if $opt->help;
 
 if ( my $path = $opt->create ) {
-    Hubot::Creator->new( path => $path )->run;
+
     exit;
 }
 
@@ -84,12 +83,6 @@ hubot - convenience command line interface L<Hubot::Robot>.
 
 C<hubot> is a Command Line Interface for L<Hubot>.
 
-=head2 BUILD DEPLOYABLE PACKAGE
-
-    $ hubot -c /path/to/hubot
-
-C<--create|-c> option is used to build deployable package onto heroku.
-
 =head1 SEE ALSO
 
 =over
@@ -108,7 +101,7 @@ Hyungsuk Hong <hshong@perl.kr>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 ~ 2013 by Hyungsuk Hong.
+This software is copyright (c) 2012 by Hyungsuk Hong.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

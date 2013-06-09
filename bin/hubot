@@ -5,35 +5,37 @@ use File::Slurp qw/read_file/;
 use JSON::XS;
 use Getopt::Long::Descriptive;
 
-my ($opt, $usage) = describe_options(
+my ( $opt, $usage ) = describe_options(
     "hubot %o <arg>",
     [ 'adapter|a=s', 'The Adapter to use', { default => 'shell' } ],
-    [ 'name|n=s',    'The name of the robot in chat', { default => 'hubot' } ],
-    [ 'scripts|s=s',    'hubot-scripts.json file path' ],
+    [ 'name|n=s', 'The name of the robot in chat', { default => 'hubot' } ],
+    [ 'scripts|s=s', 'hubot-scripts.json file path' ],
     [ 'help',        'Display the help information' ],
 );
 
-print($usage->text), exit if $opt->help;
+print( $usage->text ), exit if $opt->help;
 
-my $robot = Hubot::Robot->new({
-    adapter => $opt->{adapter},
-    name    => $opt->{name},
-});
+my $robot = Hubot::Robot->new(
+    {   adapter => $opt->{adapter},
+        name    => $opt->{name},
+    }
+);
 
-$robot->alias($opt->{alias}) if $opt->{alias};
+$robot->alias( $opt->{alias} ) if $opt->{alias};
 
 $robot->adapter->on(
     'connected',
     sub {
         my $cwd = cwd();
         my $scriptsFile = $opt->{scripts} || "$cwd/hubot-scripts.json";
-        if (-f $scriptsFile) {
-            my $json = read_file($scriptsFile);
+        if ( -f $scriptsFile ) {
+            my $json    = read_file($scriptsFile);
             my $scripts = decode_json($json);
             $robot->loadHubotScripts($scripts);
-        } else {
+        }
+        else {
             print "load built-in scripts\n";
-            $robot->loadHubotScripts(['help','tweet','ascii','roles']);
+            $robot->loadHubotScripts( [ 'help', 'tweet', 'ascii', 'roles' ] );
         }
     }
 );

@@ -36,7 +36,7 @@ sub run {
     }
     catch {
         warn "not installed `Hubot` module";    # ignore $_
-        cwd();
+        cwd() . '/share';
     };
 
     mkpath( catfile( $path, 'bin' ) );
@@ -52,8 +52,7 @@ sub run {
 
     for my $file (@files) {
         my ( $src, $dst )
-            = ( catfile("$dist_dir/templates/$file"),
-            catfile("$path/$file") );
+            = ( catfile("$dist_dir/$file"), catfile("$path/$file") );
         $self->copy( $src, $dst );
     }
 
@@ -63,8 +62,7 @@ sub run {
 
     for my $file (@bins) {
         my ( $src, $dst )
-            = ( catfile("$dist_dir/templates/$file"),
-            catfile("$path/$file") );
+            = ( catfile("$dist_dir/$file"), catfile("$path/$file") );
         $self->copy( $src, $dst );
         chmod 0755, "$dst";
     }

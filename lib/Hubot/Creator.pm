@@ -40,10 +40,7 @@ sub run {
     };
 
     mkpath( catfile( $path, 'bin' ) );
-    dircopy(
-        catfile( $dist_dir, 'lib', 'Hubot', 'Scripts' ),
-        catfile( $path,     'lib', 'Hubot', 'Scripts' ),
-    );
+    dircopy( catfile( $dist_dir, 'lib' ), catfile( $path, 'lib' ), );
 
     my @files = qw(
         .gitignore

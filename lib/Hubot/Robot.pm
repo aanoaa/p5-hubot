@@ -6,6 +6,7 @@ use namespace::autoclean;
 use Pod::Usage;
 
 use AnyEvent;
+use AnyEvent::HTTPD;
 use AnyEvent::HTTP::ScopedClient;
 
 use Hubot::User;
@@ -54,7 +55,8 @@ has '_listeners' => (
 );
 
 ## Ping Watcher
-has 'pw' => ( is => 'rw' );
+has 'pw'    => ( is => 'rw' );
+has 'httpd' => ( is => 'rw' );
 
 sub BUILD {
     my $self = shift;
@@ -65,6 +67,16 @@ sub BUILD {
 
 sub setupHerokuPing {
     my $self = shift;
+
+    my $httpd = AnyEvent::HTTPD->new( port => $ENV{PORT} || 8080 );
+    $httpd->reg_cb(
+        '/hubot/ping' => sub {
+            my ( $httpd, $req ) = @_;
+            $req->respond( { content => [ 'text/plain', "pong" ] } );
+        }
+    );
+
+    $self->httpd($httpd);
 
     my $herokuUrl = $ENV{HEROKU_URL} || return;
     $herokuUrl =~ s{/?$}{/hubot/ping};

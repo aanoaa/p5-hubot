@@ -46,9 +46,10 @@ sub run {
     );
 
     my @files = qw(
+        .gitignore
         Procfile
         README.md
-        .gitignore
+        cpanfile
         hubot-scripts.json
     );
 

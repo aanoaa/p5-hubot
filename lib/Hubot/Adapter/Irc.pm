@@ -191,7 +191,7 @@ sub run {
             my ( $channel, $mode, $target ) = @{ $ircmsg->{params} };
 
             $self->robot->mode( $mode || '' )
-                if $target eq $self->robot->name;
+                if $target && $target eq $self->robot->name;
         },
     );
 

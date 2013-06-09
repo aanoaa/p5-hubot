@@ -59,7 +59,7 @@ sub BUILD {
 
 sub loadAdapter {
     my ( $self, $adapter ) = @_;
-    ## TODO: HUBOT_DEFAULT_ADAPTERS
+
     $adapter = "Hubot::Adapter::" . ucfirst($adapter);
     eval "require $adapter; 1";
     if ($@) {

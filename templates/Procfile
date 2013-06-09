@@ -1,1 +1,1 @@
-web: perl -Ilib -Ilocal/perl5/lib bin/hubot -a irc
+web: perl -Ilib -Ilocal bin/hubot -a irc

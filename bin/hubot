@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 use Hubot::Robot;
+use Hubot::Creator;
 use Cwd 'cwd';
 use File::Slurp qw/read_file/;
 use JSON::XS;
@@ -10,10 +11,16 @@ my ( $opt, $usage ) = describe_options(
     [ 'adapter|a=s', 'The Adapter to use', { default => 'shell' } ],
     [ 'name|n=s', 'The name of the robot in chat', { default => 'hubot' } ],
     [ 'scripts|s=s', 'hubot-scripts.json file path' ],
+    [ 'create|c=s',  'Create a deployable hubot' ],
     [ 'help',        'Display the help information' ],
 );
 
 print( $usage->text ), exit if $opt->help;
+
+if ( my $path = $opt->create ) {
+    Hubot::Creator->new( path => $path )->run;
+    exit;
+}
 
 my $robot = Hubot::Robot->new(
     {   adapter => $opt->{adapter},

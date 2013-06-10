@@ -1,6 +1,10 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 # git shortlog --no-merges master --not <tag>
 
+0.2.1    Mon Jun 10 11:10:15 2013 KST
+    - fix heroku ping interval - cause too long
+    - fix bug - creator didn't copying `lib/*` files
+
 0.2.0    Mon Jun 10 02:20:32 2013 KST
     - add `hubot --create` option for building deployable package
     - deploy hubot onto heroku easily

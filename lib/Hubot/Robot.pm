@@ -83,7 +83,7 @@ sub setupHerokuPing {
 
     $self->pw(
         AE::timer 0,
-        1200000,
+        120,
         sub {
             AnyEvent::HTTP::ScopedClient->new($herokuUrl)
                 ->post( sub { print "Keep alive ping!\n" if $ENV{DEBUG} } );

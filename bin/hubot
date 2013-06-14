@@ -42,7 +42,7 @@ $robot->adapter->on(
         }
         else {
             print "load built-in scripts\n";
-            $robot->loadHubotScripts( [ 'help', 'tweet', 'ascii', 'roles' ] );
+            $robot->loadHubotScripts( [ 'help', 'ascii', 'roles' ] );
         }
     }
 );

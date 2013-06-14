@@ -27,7 +27,6 @@ example)
 
     [
       "help",
-      "tweet",
       "shorten",
       "ascii"
     ]
@@ -43,7 +42,7 @@ actually, L<Hubot::Message> C<finish> method.
 
 if F<hubot-scripts.json> is not exist, built-in scripts
 
-"help", "tweet", "ascii", "roles"
+"help", "ascii", "roles"
 
 are loaded automatically.
 

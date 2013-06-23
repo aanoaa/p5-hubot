@@ -2,25 +2,62 @@ package Hubot::Scripts::tweet;
 use strict;
 use warnings;
 use JSON::XS;
+use AnyEvent::HTTP::ScopedClient;
+use URI::Escape;
 
 sub load {
     my ( $class, $robot ) = @_;
+
+    my $authorization;
     $robot->hear(
         qr/https?:\/\/(mobile\.)?twitter\.com\/.*?\/status\/([0-9]+)/i,
         sub {
-            my $msg = shift;    # Hubot::Response
-            $msg->http( 'https://api.twitter.com/1/statuses/show/'
-                  . $msg->match->[1]
-                  . '.json' )->get(
+            my $msg = shift;
+
+            return unless $authorization;
+
+            $msg->http('https://api.twitter.com/1.1/statuses/show.json')
+                ->header( { 'Authorization' => $authorization } )
+                ->query( 'id' => $msg->match->[1] )->get(
                 sub {
                     my ( $body, $hdr ) = @_;
                     return if ( !$body || !$hdr->{Status} =~ /^2/ );
-                    print "$body\n" if $ENV{DEBUG};
                     my $tweet = decode_json($body);
                     $msg->send("$tweet->{user}{screen_name}: $tweet->{text}");
                 }
-                  );
+                );
             $msg->message->finish;
+        }
+    );
+
+    return
+        unless $ENV{HUBOT_TWITTER_CONSUMER_KEY}
+        && $ENV{HUBOT_TWITTER_CONSUMER_SECRET};
+
+    my $client = AnyEvent::HTTP::ScopedClient->new(
+        'https://api.twitter.com/oauth2/token',
+        options => {
+            auth => uri_escape( $ENV{HUBOT_TWITTER_CONSUMER_KEY} ) . ':'
+                . uri_escape( $ENV{HUBOT_TWITTER_CONSUMER_SECRET} )
+        }
+    );
+
+    $client->post(
+        { grant_type => 'client_credentials' },
+        sub {
+            my ( $body, $hdr ) = @_;
+
+            return if !$body;
+
+            my $data = decode_json($body);
+            if ( $hdr->{Status} =~ /^2/ ) {
+                my ( $token_type, $access_token )
+                    = ( $data->{token_type}, $data->{access_token} );
+                $authorization = ucfirst $token_type . " $access_token";
+            }
+            else {
+                print STDERR __PACKAGE__ . " - $data->{errors}[0]{message}\n";
+            }
         }
     );
 }
@@ -38,6 +75,16 @@ Hubot::Scripts::tweet
 =head1 SYNOPSIS
 
     <tweeturl> - Display tweet content
+
+=head1 CONFIGURATION
+
+=over
+
+=item HUBOT_TWITTER_CONSUMER_KEY
+
+=item HUBOT_TWITTER_CONSUMER_SECRET
+
+=back
 
 =head1 DESCRIPTION
 

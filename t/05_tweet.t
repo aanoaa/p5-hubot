@@ -26,7 +26,9 @@ $got = shift @{ $robot->{sent} };
 ok( "@$got", 'containing help messages' );
 
 SKIP: {
-    skip "API v1 Retirement is Complete - Use API v1.1", 1;
+    skip "API v1 Retirement is Complete - Use API v1.1", 1
+        if !$ENV{HUBOT_TWITTER_CONSUMER_KEY}
+        or !$ENV{HUBOT_TWITTER_CONSUMER_SECRET};
     $got = shift @{ $robot->{sent} };
     like( "@$got", qr/Ruby/, 'has tweet content' );
 }

@@ -83,30 +83,19 @@ sub load {
                     $title = 'no title' unless $title;
                     $title =~ s/\n//g;
                     $title =~ s/(^\s+|\s+$)//g;
-                    $title = html_conv($title);
+
+                    ## unescape html
+                    $title =~ s/&amp;/&/g;
+                    $title =~ s/&lt;/</g;
+                    $title =~ s/&gt;/>/g;
+                    $title =~ s/&quot;/"/g;
+                    $title =~ s/&apos;/'/g;
 
                     $msg->send("[$title] - $bitly");
                 }
               );
         }
     );
-}
-
-sub html_conv {
-    my %tags = (
-            '&nbsp;'    => ' ',
-            '&amp;'     => '&',
-            '&gt;'      => '>',
-            '&lt;'      => '<',
-            '&quot;'    => '"',
-        );
-
-    my $before_title = shift @_;
-
-    foreach my $key (keys %tags) {
-        $before_title =~ s/($key)/$tags{$key}/g;
-    }
-    return $before_title;
 }
 
 1;

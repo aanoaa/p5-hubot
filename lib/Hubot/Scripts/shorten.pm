@@ -83,6 +83,14 @@ sub load {
                     $title = 'no title' unless $title;
                     $title =~ s/\n//g;
                     $title =~ s/(^\s+|\s+$)//g;
+
+                    ## unescape html
+                    $title =~ s/&amp;/&/g;
+                    $title =~ s/&lt;/</g;
+                    $title =~ s/&gt;/>/g;
+                    $title =~ s/&quot;/"/g;
+                    $title =~ s/&apos;/'/g;
+
                     $msg->send("[$title] - $bitly");
                 }
               );

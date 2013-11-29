@@ -1,6 +1,10 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 # git shortlog --no-merges master --not <tag>
 
+0.2.4    Fri Nov 29 19:27:09 2013 KST
+    - [shorten] pretty title to unescape tags
+    - save user ip address if available
+
 0.2.3    Sun Jun 23 22:31:42 2013 KST
     - use twitter api v1.1 for `tweet` script
     - requires `AnyEvent::HTTP::ScopedClient` 0.0.5 or later

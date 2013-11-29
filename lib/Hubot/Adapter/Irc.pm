@@ -48,8 +48,9 @@ sub parse_msg {
     my ( $self, $irc_msg ) = @_;
 
     my ($nickname) = $irc_msg->{prefix} =~ m/^([^!]+)/;
+    my ($ip)       = $irc_msg->{prefix} =~ m/\b((?:[0-9]{1,3}\.){3}[0-9]{1,3})\b/;
     my $message = decode_utf8( $irc_msg->{params}[1] );
-    return ( $nickname, $message );
+    return ( $nickname, $message, $ip );
 }
 
 sub send {
@@ -113,9 +114,10 @@ sub run {
         },
         publicmsg => sub {
             my ( $cl, $channel, $ircmsg ) = @_;
-            my ( $nick, $msg ) = $self->parse_msg($ircmsg);
+            my ( $nick, $msg, $ip ) = $self->parse_msg($ircmsg);
             my $user = $self->createUser( $channel, $nick );
             $user->{room} = $channel if $channel =~ m/^#/;
+            $user->{ip}   = $ip      if $ip;
 
             my $is_notice = $ircmsg->{command} eq 'NOTICE';
             my $class

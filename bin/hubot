@@ -8,11 +8,11 @@ use Getopt::Long::Descriptive;
 
 my ( $opt, $usage ) = describe_options(
     "hubot %o <arg>",
-    [ 'adapter|a=s', 'The Adapter to use', { default => 'shell' } ],
-    [ 'name|n=s', 'The name of the robot in chat', { default => 'hubot' } ],
-    [ 'scripts|s=s', 'hubot-scripts.json file path' ],
-    [ 'create|c=s',  'Create a deployable hubot' ],
-    [ 'help',        'Display the help information' ],
+    ['adapter|a=s', 'The Adapter to use',            { default => 'shell' }],
+    ['name|n=s',    'The name of the robot in chat', { default => 'hubot' }],
+    ['scripts|s=s', 'hubot-scripts.json file path'],
+    ['create|c=s',  'Create a deployable hubot'],
+    ['help',        'Display the help information'],
 );
 
 print( $usage->text ), exit if $opt->help;
@@ -23,10 +23,7 @@ if ( my $path = $opt->create ) {
 }
 
 my $robot = Hubot::Robot->new(
-    {   adapter => $opt->{adapter},
-        name    => $opt->{name},
-    }
-);
+    { adapter => $opt->{adapter}, name => $opt->{name}, } );
 
 $robot->alias( $opt->{alias} ) if $opt->{alias};
 
@@ -42,7 +39,7 @@ $robot->adapter->on(
         }
         else {
             print "load built-in scripts\n";
-            $robot->loadHubotScripts( [ 'help', 'ascii', 'roles' ] );
+            $robot->loadHubotScripts( ['help', 'ascii', 'roles'] );
         }
     }
 );

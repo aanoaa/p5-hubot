@@ -4,10 +4,7 @@ use namespace::autoclean;
 
 extends 'Hubot::Listener';
 
-has 'regex' => (
-    is  => 'ro',
-    isa => 'RegexpRef',
-);
+has 'regex' => ( is => 'ro', isa => 'RegexpRef', );
 
 sub BUILD {
     my $self = shift;

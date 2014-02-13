@@ -11,11 +11,7 @@ use File::ShareDir 'dist_dir';
 use File::Spec::Functions 'catfile';
 use Try::Tiny;
 
-has 'path' => (
-    is      => 'ro',
-    isa     => 'Str',
-    default => './hubot',
-);
+has 'path' => ( is => 'ro', isa => 'Str', default => './hubot', );
 
 sub copy {
     my ( $self, $src, $dst ) = @_;

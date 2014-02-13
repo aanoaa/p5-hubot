@@ -4,10 +4,7 @@ use namespace::autoclean;
 
 use Hubot::Response;
 
-has 'robot' => (
-    is  => 'ro',
-    isa => 'Hubot::Robot',
-);
+has 'robot' => ( is => 'ro', isa => 'Hubot::Robot', );
 has 'matcher' => (
     traits  => ['Code'],
     is      => 'rw',

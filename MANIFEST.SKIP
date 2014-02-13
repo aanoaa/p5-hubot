@@ -1,0 +1,12 @@
+# Makemaker generated files and dirs.
+^MANIFEST\.
+^Makefile$
+^blib/
+
+# version-control
+^.git/
+^.gitignore
+
+^.perl-version
+^dist.ini
+^README.md

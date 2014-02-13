@@ -15,22 +15,13 @@ use Try::Tiny;
 
 use Hubot::Message;
 
-has 'robot' => (
-    is  => 'ro',
-    isa => 'Hubot::Robot',
-);
+has 'robot' => ( is => 'ro', isa => 'Hubot::Robot', );
 
-has 'cv' => (
-    is         => 'ro',
-    lazy_build => 1,
-);
+has 'cv' => ( is => 'ro', lazy_build => 1, );
 
 has 'bot' => ( is => 'rw', );
 
-has 'httpClient' => (
-    is      => 'ro',
-    default => sub { LWP::UserAgent->new },
-);
+has 'httpClient' => ( is => 'ro', default => sub { LWP::UserAgent->new }, );
 
 sub _build_cv { AnyEvent->condvar }
 
@@ -69,8 +60,7 @@ sub run {
         'message',
         sub {
             my ( $e, $data ) = @_;
-            my $user =
-              $self->userForId( $data->{user_id},
+            my $user = $self->userForId( $data->{user_id},
                 { room => $data->{room_id}, } );
 
             if ( $user->{name} eq $user->{id} ) {

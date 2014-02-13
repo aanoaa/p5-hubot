@@ -2,16 +2,9 @@ package Hubot::Message;
 use Moose;
 use namespace::autoclean;
 
-has 'user' => (
-    is  => 'ro',
-    isa => 'Hubot::User',
-);
+has 'user' => ( is => 'ro', isa => 'Hubot::User', );
 
-has 'done' => (
-    is      => 'rw',
-    isa     => 'Bool',
-    default => 0,
-);
+has 'done' => ( is => 'rw', isa => 'Bool', default => 0, );
 
 sub finish { shift->done(1) }
 
@@ -20,10 +13,7 @@ sub TO_JSON {
     return {
         ## prvent recursive call
         ## Hubot::UserTO_JSON -> Hubot::Message::TO_JSON -> Hubot::User::TO_JSON
-        user => {
-            name => $self->user->{name},
-            id   => $self->user->{id},
-        },
+        user => { name => $self->user->{name}, id => $self->user->{id}, },
         done => $self->done,
     };
 }
@@ -38,10 +28,7 @@ use namespace::autoclean;
 
 extends 'Hubot::Message';
 
-has 'text' => (
-    is  => 'ro',
-    isa => 'Str',
-);
+has 'text' => ( is => 'ro', isa => 'Str', );
 
 sub match {
     my ( $self, $regex ) = @_;

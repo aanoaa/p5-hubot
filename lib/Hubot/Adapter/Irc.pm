@@ -11,20 +11,11 @@ use Encode qw/encode_utf8 decode_utf8/;
 
 use Hubot::Message;
 
-has 'robot' => (
-    is  => 'ro',
-    isa => 'Hubot::Robot',
-);
+has 'robot' => ( is => 'ro', isa => 'Hubot::Robot', );
 
-has 'cv' => (
-    is         => 'ro',
-    lazy_build => 1,
-);
+has 'cv' => ( is => 'ro', lazy_build => 1, );
 
-has 'irc' => (
-    is         => 'ro',
-    lazy_build => 1,
-);
+has 'irc' => ( is => 'ro', lazy_build => 1, );
 
 sub _build_cv  { AnyEvent->condvar }
 sub _build_irc { AnyEvent::IRC::Client->new }
@@ -48,7 +39,7 @@ sub parse_msg {
     my ( $self, $irc_msg ) = @_;
 
     my ($nickname) = $irc_msg->{prefix} =~ m/^([^!]+)/;
-    my ($ip)       = $irc_msg->{prefix} =~ m/\b((?:[0-9]{1,3}\.){3}[0-9]{1,3})\b/;
+    my ($ip) = $irc_msg->{prefix} =~ m/\b((?:[0-9]{1,3}\.){3}[0-9]{1,3})\b/;
     my $message = decode_utf8( $irc_msg->{params}[1] );
     return ( $nickname, $message, $ip );
 }
@@ -81,7 +72,7 @@ sub run {
     my %options = (
         nick => $ENV{HUBOT_IRC_NICK} || $self->robot->name,
         port => $ENV{HUBOT_IRC_PORT} || 6667,
-        rooms    => [ split( /,/, $ENV{HUBOT_IRC_ROOMS} ) ],
+        rooms    => [split( /,/, $ENV{HUBOT_IRC_ROOMS} )],
         server   => $ENV{HUBOT_IRC_SERVER},
         user     => $ENV{HUBOT_IRC_USER},
         password => $ENV{HUBOT_IRC_PASSWORD},
@@ -113,8 +104,8 @@ sub run {
             $self->receive( new Hubot::EnterMessage( user => $user ) );
         },
         publicmsg => sub {
-            my ( $cl, $channel, $ircmsg ) = @_;
-            my ( $nick, $msg, $ip ) = $self->parse_msg($ircmsg);
+            my ( $cl,   $channel, $ircmsg ) = @_;
+            my ( $nick, $msg,     $ip )     = $self->parse_msg($ircmsg);
             my $user = $self->createUser( $channel, $nick );
             $user->{room} = $channel if $channel =~ m/^#/;
             $user->{ip}   = $ip      if $ip;
@@ -122,12 +113,7 @@ sub run {
             my $is_notice = $ircmsg->{command} eq 'NOTICE';
             my $class
                 = $is_notice ? 'Hubot::NoticeMessage' : 'Hubot::TextMessage';
-            $self->receive(
-                $class->new(
-                    user => $user,
-                    text => $msg,
-                )
-            );
+            $self->receive( $class->new( user => $user, text => $msg, ) );
         },
         privatemsg => sub {
             my ( $cl, $nick, $ircmsg ) = @_;
@@ -151,12 +137,7 @@ sub run {
                 ? 'Hubot::NoticeMessage'
                 : 'Hubot::WhisperMessage';
             my $user = $self->createUser( $channel, $from );
-            $self->receive(
-                $class->new(
-                    user => $user,
-                    text => $msg,
-                )
-            );
+            $self->receive( $class->new( user => $user, text => $msg, ) );
         },
         part => sub {
             my ( $cl, $nick, $channel, $is_myself, $msg ) = @_;
@@ -183,8 +164,8 @@ sub run {
             $self->receive(
                 new Hubot::NoticeMessage(
                     user => $user,
-                    text => sprintf( "%s %s %s",
-                        @{ $ircmsg->{params} }[ 1, 3, 2 ] ),
+                    text =>
+                        sprintf( "%s %s %s", @{ $ircmsg->{params} }[1, 3, 2] ),
                 )
             );
         },
@@ -211,7 +192,8 @@ sub run {
     $self->irc->connect(
         $options{server},
         $options{port},
-        {   nick     => $options{nick},
+        {
+            nick     => $options{nick},
             user     => $options{user},
             real     => $options{realname},
             password => $options{password},
@@ -239,12 +221,7 @@ sub createUser {
     unless ($user) {
         my $id = time;
         $id =~ s/\.//;
-        $user = $self->userForId(
-            $id,
-            {   name => $from,
-                room => $channel,
-            }
-        );
+        $user = $self->userForId( $id, { name => $from, room => $channel, } );
     }
 
     return $user;

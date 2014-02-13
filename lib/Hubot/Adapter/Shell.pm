@@ -10,21 +10,11 @@ use AnyEvent;
 
 use Hubot::Message;
 
-has 'robot' => (
-    is  => 'ro',
-    isa => 'Hubot::Robot',
-);
+has 'robot' => ( is => 'ro', isa => 'Hubot::Robot', );
 
-has '_prompt' => (
-    is     => 'rw',
-    isa    => 'Str',
-    writer => 'setPrompt',
-);
+has '_prompt' => ( is => 'rw', isa => 'Str', writer => 'setPrompt', );
 
-has 'cv' => (
-    is         => 'ro',
-    lazy_build => 1,
-);
+has 'cv' => ( is => 'ro', lazy_build => 1, );
 
 sub _build_cv { AnyEvent->condvar }
 
@@ -67,22 +57,11 @@ sub run {
                 exit;
             }
 
-            my $user = $self->userForId(
-                1,
-                {
-                    name => 'Shell',
-                    room => 'Shell',
-                }
-            );
+            my $user
+                = $self->userForId( 1, { name => 'Shell', room => 'Shell', } );
 
             $self->receive(
-                new Hubot::TextMessage(
-                    {
-                        user => $user,
-                        text => $input,
-                    }
-                )
-            );
+                new Hubot::TextMessage( { user => $user, text => $input, } ) );
 
             print $self->_prompt;
         }

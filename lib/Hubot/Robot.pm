@@ -28,30 +28,21 @@ has '_helps' => (
     is      => 'rw',
     isa     => 'ArrayRef[Str]',
     default => sub { [] },
-    handles => {
-        helps   => 'elements',
-        addHelp => 'push',
-    }
+    handles => { helps => 'elements', addHelp => 'push', }
 );
 has '_commands' => (
     traits  => ['Array'],
     is      => 'rw',
     isa     => 'ArrayRef[Str]',
     default => sub { [] },
-    handles => {
-        commands   => 'elements',
-        addCommand => 'push',
-    }
+    handles => { commands => 'elements', addCommand => 'push', }
 );
 has '_listeners' => (
     traits  => ['Array'],
     is      => 'rw',
     isa     => 'ArrayRef[Hubot::Listener]',
     default => sub { [] },
-    handles => {
-        listeners   => 'elements',
-        addListener => 'push',
-    }
+    handles => { listeners => 'elements', addListener => 'push', }
 );
 
 ## Ping Watcher
@@ -72,7 +63,7 @@ sub setupHerokuPing {
     $httpd->reg_cb(
         '/hubot/ping' => sub {
             my ( $httpd, $req ) = @_;
-            $req->respond( { content => [ 'text/plain', "pong" ] } );
+            $req->respond( { content => ['text/plain', "pong"] } );
         }
     );
 
@@ -198,11 +189,7 @@ sub parseHelp {
 
     open my $fh, '>', \my $usage or die "Couldn't open filehandle: $!\n";
     pod2usage(
-        {   -input   => $fullpath,
-            -output  => $fh,
-            -exitval => 'noexit',
-        }
-    );
+        { -input => $fullpath, -output => $fh, -exitval => 'noexit', } );
 
     $usage =~ s/^Usage://;
     $usage =~ s/(^\s+|\s+$)//gm;
@@ -247,7 +234,7 @@ sub respond {
     my $name = $self->name;
     if ( $self->alias ) {
         my $alias = $self->alias;
-        $alias =~ s/[-[\]{}()\*+?.,\\^$|#\s]/\\$&/g; # escape alias for regexp
+        $alias =~ s/[-[\]{}()\*+?.,\\^$|#\s]/\\$&/g;  # escape alias for regexp
 
         ## TODO: fix to generate correct regex
         ## qr/regex/$var 처럼 modifier 에 변수가 들어갈 수 없음
@@ -304,8 +291,8 @@ sub whisper {
     my ( $self, $callback ) = @_;
     $self->addListener(
         Hubot::Listener->new(
-            robot   => $self,
-            matcher => sub { ref(shift) eq 'Hubot::WhisperMessage' ? 1 : () },
+            robot    => $self,
+            matcher  => sub { ref(shift) eq 'Hubot::WhisperMessage' ? 1 : () },
             callback => $callback
         )
     );
@@ -326,9 +313,8 @@ sub catchAll {
     my ( $self, $callback ) = @_;
     $self->addListener(
         Hubot::Listener->new(
-            robot => $self,
-            matcher =>
-                sub { ref(shift) eq 'Hubot::CatchAllMessage' ? 1 : () },
+            robot   => $self,
+            matcher => sub { ref(shift) eq 'Hubot::CatchAllMessage' ? 1 : () },
             callback => sub {
                 my $msg = shift;
                 $msg->message( $msg->message->message );

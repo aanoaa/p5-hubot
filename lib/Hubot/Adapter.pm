@@ -4,10 +4,7 @@ use namespace::autoclean;
 
 extends 'Hubot::EventEmitter';
 
-has 'robot' => (
-    is  => 'ro',
-    isa => 'Hubot::Robot'
-);
+has 'robot' => ( is => 'ro', isa => 'Hubot::Robot' );
 
 sub send    { }
 sub whisper { }

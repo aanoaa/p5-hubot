@@ -9,13 +9,13 @@ sub load {
         sub {
             my $msg = shift;
             $msg->http('http://asciime.heroku.com/generate_ascii')
-              ->query( 's', $msg->match->[1] )->get(
+                ->query( 's', $msg->match->[1] )->get(
                 sub {
                     my ( $body, $hdr ) = @_;
                     return if ( !$body || !$hdr->{Status} =~ /^2/ );
                     $msg->send( split( /\n/, $body ) );
                 }
-              );
+                );
         }
     );
 }

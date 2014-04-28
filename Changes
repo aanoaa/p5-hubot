@@ -1,6 +1,9 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 # git shortlog --no-merges develop --not <tag>
 
+0.2.6    Mon Apr 28 22:29:56 2014 KST
+    - use env variable HUBOT_HTTPD_ADDRESS to specify the listen address
+
 0.2.5    Fri Feb 14 01:30:56 2014 KST
     - keep simple dist.ini and using cpanfile
     - perltidy all

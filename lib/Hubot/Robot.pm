@@ -59,7 +59,7 @@ sub BUILD {
 sub setupHerokuPing {
     my $self = shift;
 
-    my $httpd = AnyEvent::HTTPD->new( port => $ENV{PORT} || 8080 );
+    my $httpd = AnyEvent::HTTPD->new( port => $ENV{PORT} || 8080, host => $ENV{HUBOT_HTTPD_ADDRESS} || '0.0.0.0' );
     $httpd->reg_cb(
         '/hubot/ping' => sub {
             my ( $httpd, $req ) = @_;

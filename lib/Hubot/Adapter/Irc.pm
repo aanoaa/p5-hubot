@@ -142,6 +142,8 @@ sub run {
         part => sub {
             my ( $cl, $nick, $channel, $is_myself, $msg ) = @_;
 
+            $msg = "no quit message" unless $msg;
+
             print "$nick leaves $channel: $msg\n";
             my $user = $self->createUser( $channel, $nick );
             $self->receive(
@@ -149,6 +151,8 @@ sub run {
         },
         quit => sub {
             my ( $cl, $nick, $msg ) = @_;
+
+            $msg = "no quit message" unless $msg;
 
             print "$nick quit: $msg\n";
             my $user = $self->createUser( '', $nick )

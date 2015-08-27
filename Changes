@@ -1,5 +1,7 @@
 go to https://github.com/aanoaa/p5-hubot/issues for the roadmap and known issues.
 # git shortlog --no-merges develop --not <tag>
+
+0.2.8    Thu, 27 Aug 2015 15:18:03 +0900
     - [ascii] http://asciime.heroku.com/generate_ascii service down. use alternative ascii art generator.
     - [tweet] parse `\n`
 

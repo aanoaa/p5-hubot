@@ -10,3 +10,4 @@
 ^.perl-version
 ^dist.ini
 ^README.md
+^.pause

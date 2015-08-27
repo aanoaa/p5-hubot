@@ -23,7 +23,8 @@ sub load {
                     my ( $body, $hdr ) = @_;
                     return if ( !$body || !$hdr->{Status} =~ /^2/ );
                     my $tweet = decode_json($body);
-                    $msg->send("$tweet->{user}{screen_name}: $tweet->{text}");
+                    my $text  = "$tweet->{user}{screen_name}: $tweet->{text}";
+                    $msg->send( split /\n/, $text );
                 }
                 );
             $msg->message->finish;

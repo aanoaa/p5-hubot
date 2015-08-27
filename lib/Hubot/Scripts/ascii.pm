@@ -8,14 +8,16 @@ sub load {
         qr/^ascii:?( me)? (.+)/i,
         sub {
             my $msg = shift;
-            $msg->http('http://asciime.heroku.com/generate_ascii')
-                ->query( 's', $msg->match->[1] )->get(
+
+            $msg->http('http://www.kammerl.de/ascii/AsciiSignature.php')->post(
+                { figletfont => "3", figlettext => $msg->match->[1] },
                 sub {
                     my ( $body, $hdr ) = @_;
                     return if ( !$body || !$hdr->{Status} =~ /^2/ );
-                    $msg->send( split( /\n/, $body ) );
+                    my ($ascii) = $body =~ m/<small>(.*?)<\/small><br\/>/is;
+                    $msg->send( split( /\n/, $ascii ) );
                 }
-                );
+            );
         }
     );
 }

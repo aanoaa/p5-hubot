@@ -15,7 +15,6 @@ Hubot - L<AnyEvent> based L<https://github.com/github/hubot>
     $ echo '["help"]' > hubot-scripts.json
     $ hubot
     hubot> hubot help
-    hubot> exit
 
 =head1 DESCRIPTION
 
@@ -73,23 +72,33 @@ good choice for development.
 
 =over
 
-=item L<Hubot::Scripts::help>
+=item *
+
+L<Hubot::Scripts::help>
 
     hubot: help
 
-=item L<Hubot::Scripts::ascii>
+=item *
+
+L<Hubot::Scripts::ascii>
 
     ascii hello
 
-=item L<Hubot::Scripts::shorten>
+=item *
+
+L<Hubot::Scripts::shorten>
 
     http://example.com
 
-=item L<Hubot::Scripts::tweet>
+=item *
+
+L<Hubot::Scripts::tweet>
 
     http://twitter.com/KBO_Scores/status/256376098764505088
 
-=item L<Hubot::Scripts::roles>
+=item *
+
+L<Hubot::Scripts::roles>
 
     hubot: <user> is a <role>
     hubot: who is <user>

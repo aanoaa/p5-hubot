@@ -1,13 +1,14 @@
 package Hubot::EventEmitter;
-use Moose;
-use namespace::autoclean;
+use Moo;
 
-has 'events' => ( is => 'rw', isa => 'HashRef', default => sub { {} }, );
+has 'events' => ( is => 'rw', default => sub { {} } );
 
 sub emit {
     my ( $self, $name ) = ( shift, shift );
     if ( my $s = $self->events->{$name} ) {
-        for my $cb (@$s) { $self->$cb(@_) }
+        for my $cb (@$s) {
+            $self->$cb(@_);
+        }
     }
     return $self;
 }
@@ -18,8 +19,6 @@ sub on {
     return $cb;
 }
 
-__PACKAGE__->meta->make_immutable;
-
 1;
 
 =pod
@@ -28,12 +27,12 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Hubot::EventEmitter
+Hubot::EventEmitter - Listen events and trigger
 
 =head1 SYNOPSIS
 
     package Foo;
-    use Moose;
+    use Moo;
     extends 'Hubot::EventEmitter';
 
     package main;
@@ -41,7 +40,7 @@ Hubot::EventEmitter
     $foo->on(
         'event1',
         sub {
-            my ($e, @args) = @_;    # $e is event emitter. ignore.
+            my ($e, @args) = @_;    # $e is `$foo` itself. ignore.
             print "@args\n";    # 1 2 3 4
         }
     );
@@ -54,13 +53,9 @@ subscribe event via C<on> then execute callback via C<emit>.
 
 =head1 METHODS
 
-=head2 on
+=head2 on( $name, $cb )
 
-args - C<event-name>, C<callback>
-
-=head2 emit
-
-args - C<event-name>, C<@arg-pass-to-callback>
+=head2 emit( $name, \@cb_args )
 
 =head1 AUTHOR
 

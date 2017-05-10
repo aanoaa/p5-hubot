@@ -1,6 +1,5 @@
 package Hubot::Adapter::Shell;
-use Moose;
-use namespace::autoclean;
+use Moo;
 
 use Encode 'decode_utf8';
 
@@ -10,13 +9,11 @@ use AnyEvent;
 
 use Hubot::Message;
 
-has 'robot' => ( is => 'ro', isa => 'Hubot::Robot', );
+has 'robot'  => ( is => 'ro' );
+has 'prompt' => ( is => 'rw' );
+has 'cv'     => ( is => 'ro', default => sub { AnyEvent->condvar } );
 
-has '_prompt' => ( is => 'rw', isa => 'Str', writer => 'setPrompt', );
-
-has 'cv' => ( is => 'ro', lazy_build => 1, );
-
-sub _build_cv { AnyEvent->condvar }
+# sub _build_cv { AnyEvent->condvar }
 
 sub close { shift->cv->send }
 
@@ -43,8 +40,8 @@ sub run {
     binmode STDOUT, ':encoding(UTF-8)';
 
     $self->emit('connected');
-    $self->setPrompt( $self->robot->name . "> " );
-    print $self->_prompt;
+    $self->prompt( $self->robot->name . "> " );
+    print $self->prompt;
     my $w;
     $w = AnyEvent->io(
         fh   => \*STDIN,
@@ -57,21 +54,15 @@ sub run {
                 exit;
             }
 
-            my $user
-                = $self->userForId( 1, { name => 'Shell', room => 'Shell', } );
-
-            $self->receive(
-                new Hubot::TextMessage( { user => $user, text => $input, } ) );
-
-            print $self->_prompt;
+            my $user = $self->userForId( 1, { name => 'Shell', room => 'Shell', } );
+            $self->receive( new Hubot::TextMessage( { user => $user, text => $input, } ) );
+            print $self->prompt;
         }
     );
 
     $self->cv->recv;
     exit;
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 

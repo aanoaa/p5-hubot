@@ -1,7 +1,6 @@
 package Hubot::Robot;
 
-use Moose;
-use namespace::autoclean;
+use Moo;
 
 use Pod::Usage;
 
@@ -14,36 +13,14 @@ use Hubot::Brain;
 use Hubot::Listener;
 use Hubot::TextListener;
 
-has 'name'  => ( is => 'rw', isa => 'Str' );
-has 'alias' => ( is => 'rw', isa => 'Str' );
-has 'mode'  => ( is => 'rw', isa => 'Str', default => '' );
-has 'adapter' => ( is => 'rw' );
-has 'brain' => (
-    is      => 'ro',
-    isa     => 'Hubot::Brain',
-    default => sub { Hubot::Brain->new }
-);
-has '_helps' => (
-    traits  => ['Array'],
-    is      => 'rw',
-    isa     => 'ArrayRef[Str]',
-    default => sub { [] },
-    handles => { helps => 'elements', addHelp => 'push', }
-);
-has '_commands' => (
-    traits  => ['Array'],
-    is      => 'rw',
-    isa     => 'ArrayRef[Str]',
-    default => sub { [] },
-    handles => { commands => 'elements', addCommand => 'push', }
-);
-has '_listeners' => (
-    traits  => ['Array'],
-    is      => 'rw',
-    isa     => 'ArrayRef[Hubot::Listener]',
-    default => sub { [] },
-    handles => { listeners => 'elements', addListener => 'push', }
-);
+has 'name'      => ( is => 'rw' );
+has 'alias'     => ( is => 'rw' );
+has 'mode'      => ( is => 'rw', default => '' );
+has 'adapter'   => ( is => 'rw' );
+has 'brain'     => ( is => 'ro', default => sub { Hubot::Brain->new } );
+has 'helps'     => ( is => 'rw', default => sub { [] } );
+has 'commands'  => ( is => 'rw', default => sub { [] } );
+has 'listeners' => ( is => 'rw', default => sub { [] } );
 
 ## Ping Watcher
 has 'pw'    => ( is => 'rw' );
@@ -59,25 +36,31 @@ sub BUILD {
 sub setupHerokuPing {
     my $self = shift;
 
-    my $httpd = AnyEvent::HTTPD->new( port => $ENV{PORT} || 8080, host => $ENV{HUBOT_HTTPD_ADDRESS} || '0.0.0.0' );
+    my $host = $ENV{HUBOT_HTTPD_HOST} || '0.0.0.0';
+    my $port = $ENV{HUBOT_HTTPD_PORT} || 8080;
+    my $httpd = AnyEvent::HTTPD->new( host => $host, port => $port );
     $httpd->reg_cb(
         '/hubot/ping' => sub {
             my ( $httpd, $req ) = @_;
-            $req->respond( { content => ['text/plain', "pong"] } );
+            $req->respond( { content => [ 'text/plain', "pong" ] } );
         }
     );
 
     $self->httpd($httpd);
 
-    my $herokuUrl = $ENV{HEROKU_URL} || return;
+    my $herokuUrl = $ENV{HUBOT_HEROKU_URL} || return; # heroku app domain
     $herokuUrl =~ s{/?$}{/hubot/ping};
 
+    my $interval = $ENV{HUBOT_HEROKU_PING_INTERVAL} || 120; # secs
     $self->pw(
         AE::timer 0,
-        120,
+        $interval,
         sub {
-            AnyEvent::HTTP::ScopedClient->new($herokuUrl)
-                ->post( sub { print "Keep alive ping!\n" if $ENV{DEBUG} } );
+            AnyEvent::HTTP::ScopedClient->new($herokuUrl)->post(
+                sub {
+                    print "Keep alive ping!\n" if $ENV{HUBOT_DEBUG};
+                }
+            );
         }
     );
 }
@@ -133,8 +116,7 @@ sub usersForFuzzyRawName {
     my ( $self, $fuzzyName ) = @_;
     my $lowerFuzzyName = lc $fuzzyName;
     my @users;
-    while ( my ( $key, $user ) = each %{ $self->brain->{data}{users} || {} } )
-    {
+    while ( my ( $key, $user ) = each %{ $self->brain->{data}{users} || {} } ) {
         if ( lc( $user->{name} ) =~ m/^$lowerFuzzyName/ ) {
             push @users, $user;
         }
@@ -188,25 +170,25 @@ sub parseHelp {
     my $fullpath = $INC{ $module . '.pm' };
 
     open my $fh, '>', \my $usage or die "Couldn't open filehandle: $!\n";
-    pod2usage(
-        { -input => $fullpath, -output => $fh, -exitval => 'noexit', } );
+    pod2usage( { -input => $fullpath, -output => $fh, -exitval => 'noexit', } );
 
     $usage =~ s/^Usage://;
     $usage =~ s/(^\s+|\s+$)//gm;
-    $self->addHelp($_) for split( /\n/, $usage );
+
+    for my $line ( split /\n/, $usage ) {
+        push @{ $self->helps }, $line;
+    }
 
     $module =~ s{Hubot/Scripts/}{};
-    $self->addCommand($module);
+    push @{ $self->commands }, $module;
 }
 
 sub hear {
     my ( $self, $regex, $callback ) = @_;
-    $self->addListener(
-        new Hubot::TextListener(
-            robot    => $self,
-            regex    => $regex,
-            callback => $callback
-        )
+    push @{ $self->listeners }, new Hubot::TextListener(
+        robot    => $self,
+        regex    => $regex,
+        callback => $callback
     );
 }
 
@@ -225,8 +207,7 @@ sub respond {
     }
 
     if ( $first eq '^' ) {
-        print STDERR
-            "Anchors don't work well with respond, perhaps you want to use 'hear'\n";
+        print STDERR "Anchors don't work well with respond, perhaps you want to use 'hear'\n";
         print STDERR "The regex in question was $stringRegex\n";
     }
 
@@ -234,7 +215,7 @@ sub respond {
     my $name = $self->name;
     if ( $self->alias ) {
         my $alias = $self->alias;
-        $alias =~ s/[-[\]{}()\*+?.,\\^$|#\s]/\\$&/g;  # escape alias for regexp
+        $alias =~ s/[-[\]{}()\*+?.,\\^$|#\s]/\\$&/g; # escape alias for regexp
 
         ## TODO: fix to generate correct regex
         ## qr/regex/$var 처럼 modifier 에 변수가 들어갈 수 없음
@@ -256,78 +237,68 @@ sub respond {
     }
 
     print "$newRegex\n" if $ENV{DEBUG};
-    $self->addListener(
+    push @{ $self->listeners },
         new Hubot::TextListener(
-            robot    => $self,
-            regex    => $newRegex,
-            callback => $callback
-        )
-    );
+        robot    => $self,
+        regex    => $newRegex,
+        callback => $callback
+        );
 }
 
 sub enter {
     my ( $self, $callback ) = @_;
-    $self->addListener(
-        Hubot::Listener->new(
-            robot    => $self,
-            matcher  => sub { ref(shift) eq 'Hubot::EnterMessage' ? 1 : () },
-            callback => $callback
-        )
+
+    push @{ $self->listeners }, Hubot::Listener->new(
+        robot    => $self,
+        matcher  => sub { ref(shift) eq 'Hubot::EnterMessage' ? 1 : () },
+        callback => $callback
     );
 }
 
 sub leave {
     my ( $self, $callback ) = @_;
-    $self->addListener(
-        Hubot::Listener->new(
-            robot    => $self,
-            matcher  => sub { ref(shift) eq 'Hubot::LeaveMessage' ? 1 : () },
-            callback => $callback
-        )
+    push @{ $self->listeners }, Hubot::Listener->new(
+        robot    => $self,
+        matcher  => sub { ref(shift) eq 'Hubot::LeaveMessage' ? 1 : () },
+        callback => $callback
     );
 }
 
 sub whisper {
     my ( $self, $callback ) = @_;
-    $self->addListener(
-        Hubot::Listener->new(
-            robot    => $self,
-            matcher  => sub { ref(shift) eq 'Hubot::WhisperMessage' ? 1 : () },
-            callback => $callback
-        )
+    push @{ $self->listeners }, Hubot::Listener->new(
+        robot    => $self,
+        matcher  => sub { ref(shift) eq 'Hubot::WhisperMessage' ? 1 : () },
+        callback => $callback
     );
 }
 
 sub notice {
     my ( $self, $callback ) = @_;
-    $self->addListener(
-        Hubot::Listener->new(
-            robot    => $self,
-            matcher  => sub { ref(shift) eq 'Hubot::NoticeMessage' ? 1 : () },
-            callback => $callback
-        )
+    push @{ $self->listeners }, Hubot::Listener->new(
+        robot    => $self,
+        matcher  => sub { ref(shift) eq 'Hubot::NoticeMessage' ? 1 : () },
+        callback => $callback
     );
 }
 
 sub catchAll {
     my ( $self, $callback ) = @_;
-    $self->addListener(
-        Hubot::Listener->new(
-            robot   => $self,
-            matcher => sub { ref(shift) eq 'Hubot::CatchAllMessage' ? 1 : () },
-            callback => sub {
-                my $msg = shift;
-                $msg->message( $msg->message->message );
-                $callback->($msg);
-            }
-        )
+    push @{ $self->listeners }, Hubot::Listener->new(
+        robot    => $self,
+        matcher  => sub { ref(shift) eq 'Hubot::CatchAllMessage' ? 1 : () },
+        callback => sub {
+            my $msg = shift;
+            $msg->message( $msg->message->message );
+            $callback->($msg);
+        }
     );
 }
 
 sub receive {
     my ( $self, $message ) = @_;
     my $results = [];
-    for my $listener ( $self->listeners ) {
+    for my $listener ( @{ $self->listeners } ) {
         eval $listener->call($message);
         last if $message->done;
         if ($@) {
@@ -341,8 +312,6 @@ sub receive {
 }
 
 sub http { AnyEvent::HTTP::ScopedClient->new( $_[1] ) }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 

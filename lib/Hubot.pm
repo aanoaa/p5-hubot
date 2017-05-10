@@ -57,14 +57,16 @@ adapters are sharing all `Hubot::Scripts::*` extends scripts.
 
 =over
 
-=item L<Hubot::Adapter::Shell>
+=item *
+
+L<Hubot::Adapter::Shell>
 
 gives local shell prompt.
 good choice for development.
 
-=item L<Hubot::Adapter::Irc>
+=item *
 
-=item L<Hubot::Adapter::Campfire>
+L<Hubot::Adapter::Irc>
 
 =back
 

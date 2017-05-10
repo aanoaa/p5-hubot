@@ -1,17 +1,10 @@
 package Hubot::Adapter;
-use Moose;
-use namespace::autoclean;
+use Moo;
 
 extends 'Hubot::EventEmitter';
+with 'Hubot::Role::Adapter';
 
-has 'robot' => ( is => 'ro', isa => 'Hubot::Robot' );
-
-sub send    { }
-sub whisper { }
-sub reply   { }
-sub run     { }
-sub close   { }
-sub exist   { }
+has 'robot' => ( is => 'ro' );
 
 sub receive              { shift->robot->receive(@_) }
 sub users                { shift->robot->users }
@@ -20,8 +13,6 @@ sub userForName          { shift->robot->userForName(@_) }
 sub usersForFuzzyRawName { shift->robot->usersForFuzzyRawName(@_) }
 sub usersForFuzzyName    { shift->robot->usersForFuzzyName(@_) }
 sub http                 { shift->robot->http(@_) }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -63,11 +54,13 @@ Adapters are the interface to the service you want your hubot to run on.
 
 =over
 
-=item L<Shell|Hubot::Adapter::Shell>
+=item *
 
-=item L<IRC|Hubot::Adapter::Irc>
+L<Shell|Hubot::Adapter::Shell>
 
-=item L<Campfire|Hubot::Adapter::Campfire>
+=item *
+
+L<IRC|Hubot::Adapter::Irc>
 
 =back
 

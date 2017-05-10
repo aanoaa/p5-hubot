@@ -1,10 +1,8 @@
 package Hubot::Message;
-use Moose;
-use namespace::autoclean;
+use Moo;
 
-has 'user' => ( is => 'ro', isa => 'Hubot::User', );
-
-has 'done' => ( is => 'rw', isa => 'Bool', default => 0, );
+has 'user' => ( is => 'ro' );
+has 'done' => ( is => 'rw', default => 0 );
 
 sub finish { shift->done(1) }
 
@@ -18,72 +16,58 @@ sub TO_JSON {
     };
 }
 
-__PACKAGE__->meta->make_immutable;
-
 1;
 
 package Hubot::TextMessage;
-use Moose;
-use namespace::autoclean;
+use Moo;
 
 extends 'Hubot::Message';
 
-has 'text' => ( is => 'ro', isa => 'Str', );
+has 'text' => ( is => 'ro' );
 
 sub match {
     my ( $self, $regex ) = @_;
     return $self->text =~ m/$regex/;
 }
 
-override 'TO_JSON' => sub {
-    my $self = shift;
-    return { %{ super() }, text => $self->text };
+around 'TO_JSON' => sub {
+    my ( $orig, $self ) = ( shift, shift );
+    my $hashref = $self->$orig(@_);
+    $hashref->{text} = $self->text;
+    return $hashref;
 };
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 
 package Hubot::EnterMessage;
-use Moose;
-use namespace::autoclean;
+use Moo;
 extends 'Hubot::Message';
-__PACKAGE__->meta->make_immutable;
 
 1;
 
 package Hubot::LeaveMessage;
-use Moose;
-use namespace::autoclean;
+use Moo;
 extends 'Hubot::Message';
-__PACKAGE__->meta->make_immutable;
 
 1;
 
 package Hubot::WhisperMessage;
-use Moose;
-use namespace::autoclean;
+use Moo;
 extends 'Hubot::TextMessage';
-__PACKAGE__->meta->make_immutable;
 
 1;
 
 package Hubot::NoticeMessage;
-use Moose;
-use namespace::autoclean;
+use Moo;
 extends 'Hubot::TextMessage';
-__PACKAGE__->meta->make_immutable;
 
 1;
 
 package Hubot::CatchAllMessage;
-use Moose;
-use namespace::autoclean;
+use Moo;
 extends 'Hubot::Message';
 
-has 'message' => ( is => 'ro', isa => 'Hubot::Message' );
-
-__PACKAGE__->meta->make_immutable;
+has 'message' => ( is => 'ro' );
 
 1;
 

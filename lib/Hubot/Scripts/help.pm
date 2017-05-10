@@ -7,12 +7,12 @@ sub load {
     $robot->respond(
         qr/help\s*(.*)?$/i,
         sub {
-            my $msg   = shift;           # Hubot::Response
-            my @helps = $robot->helps;
+            my $msg   = shift;             # Hubot::Response
+            my @helps = @{ $robot->helps };
 
             my $robotName = $robot->name;
             unless ( $robotName =~ m/^hubot$/ ) {
-                map {s/hubot/$robotName/ig} @helps;
+                map { s/hubot/$robotName/ig } @helps;
             }
 
             if ( $msg->match->[0] ) {
@@ -20,7 +20,7 @@ sub load {
                 @helps = grep { $_ =~ /$regex/i } @helps;
             }
 
-            map {s/^/\# /} @helps;
+            map { s/^/\# / } @helps;
             $msg->send(@helps);
         }
     );

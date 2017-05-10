@@ -1,27 +1,17 @@
 package Hubot::Listener;
-use Moose;
-use namespace::autoclean;
+use Moo;
 
 use Hubot::Response;
 
-has 'robot' => ( is => 'ro', isa => 'Hubot::Robot', );
-has 'matcher' => (
-    traits  => ['Code'],
-    is      => 'rw',
-    isa     => 'CodeRef',
-    handles => { matching => 'execute', },
-);
-has 'callback' => (
-    traits  => ['Code'],
-    is      => 'rw',
-    isa     => 'CodeRef',
-    handles => { cb => 'execute', },
-);
+has 'robot'    => ( is => 'ro' );
+has 'matcher'  => ( is => 'rw' );
+has 'callback' => ( is => 'rw' );
 
 sub call {
     my ( $self, $message ) = @_;
-    if ( my @match = $self->matching($message) ) {
-        $self->cb(
+
+    if ( my @match = $self->matcher->($message) ) {
+        $self->callback(
             new Hubot::Response(
                 robot   => $self->robot,
                 message => $message,
@@ -35,8 +25,6 @@ sub call {
         return 0;
     }
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 

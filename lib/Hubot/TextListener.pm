@@ -1,10 +1,9 @@
 package Hubot::TextListener;
-use Moose;
-use namespace::autoclean;
+use Moo;
 
 extends 'Hubot::Listener';
 
-has 'regex' => ( is => 'ro', isa => 'RegexpRef', );
+has 'regex' => ( is => 'ro' );
 
 sub BUILD {
     my $self = shift;
@@ -19,8 +18,6 @@ sub BUILD {
         }
     );
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 

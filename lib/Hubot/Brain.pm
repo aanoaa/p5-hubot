@@ -1,6 +1,5 @@
 package Hubot::Brain;
-use Moose;
-use namespace::autoclean;
+use Moo;
 
 extends 'Hubot::EventEmitter';
 
@@ -22,6 +21,7 @@ sub close {
 
 sub mergeData {
     my ( $self, $data ) = @_;
+
     for my $key ( keys %$data ) {
         if ( $key eq 'users' ) {
             for my $k ( keys %{ $data->{$key} } ) {
@@ -34,8 +34,6 @@ sub mergeData {
 
     $self->emit( 'loaded', $self->{data} );
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 

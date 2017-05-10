@@ -1,12 +1,9 @@
 package Hubot::Scripts::shorten;
 use strict;
 use warnings;
-use URI;
-use URI::QueryParam;
-use HTTP::Request;
-use LWP::UserAgent;
-use JSON::XS;
 use Encode 'decode';
+use HTTP::Tiny;
+use JSON qw/decode_json/;
 
 sub load {
     my ( $class, $robot ) = @_;
@@ -19,22 +16,28 @@ sub load {
                 && $ENV{HUBOT_BITLY_USERNAME}
                 && $ENV{HUBOT_BITLY_API_KEY} )
             {
-                my $uri = URI->new("http://api.bitly.com/v3/shorten");
-                $uri->query_form_hash(
-                    login   => $ENV{HUBOT_BITLY_USERNAME},
-                    apiKey  => $ENV{HUBOT_BITLY_API_KEY},
-                    longUrl => $bitly,
-                    format  => 'json'
+                my $http   = HTTP::Tiny->new;
+                my $params = $http->www_form_urlencode(
+                    {
+                        login   => $ENV{HUBOT_BITLY_USERNAME},
+                        apiKey  => $ENV{HUBOT_BITLY_API_KEY},
+                        longUrl => $bitly,
+                        format  => 'json'
+                    }
                 );
-                my $ua  = LWP::UserAgent->new;
-                my $req = HTTP::Request->new( 'GET' => $uri );
-                my $res = $ua->request($req);
-                return unless $res->is_success;
-                my $data = decode_json( $res->content );
+
+                my $res = $http->get("http://api.bitly.com/v3/shorten?$params");
+                unless ( $res->{success} ) {
+                    print STDERR "$res->{status}: $res->{reason}\n";
+                    return;
+                }
+
+                my $data = decode_json( $res->{content} );
                 $bitly = $data->{data}{url};
             }
 
-            $msg->http( $msg->match->[0] )->header( "User-Agent",
+            $msg->http( $msg->match->[0] )->header(
+                "User-Agent",
                 "Mozilla/5.0 (X11; Linux x86_64; rv:10.0.7) Gecko/20100101 Firefox/10.0.7 Iceweasel/10.0.7"
                 )->get(
                 sub {
@@ -43,7 +46,7 @@ sub load {
 
                     ## content-type
                     my @ct = split( /\s*,\s*/, $hdr->{'content-type'} );
-                    if ( grep {/^image\/.+$/i} @ct || grep { !/text/i } @ct ) {
+                    if ( grep { /^image\/.+$/i } @ct || grep { !/text/i } @ct ) {
                         return $msg->send("[$ct[0]] - $bitly");
                     }
 
@@ -52,13 +55,10 @@ sub load {
                     ### [FILTER] - <script type="text/javascript" src="http://news.chosun.com/dhtm/js/gnb_news_2011.js" charset="euc-kr"></script>
                     $body =~ s{\r\n}{\n}g;
                     my @charset_lines
-                        = grep { $_ !~ /script/ } grep {/charset/} split /\n/,
+                        = grep { $_ !~ /script/ } grep { /charset/ } split /\n/,
                         $body;
                     my $charset;
-                    if ( "@{[ @charset_lines ]}"
-                        =~ /charset=(?:'([^']+?)'|"([^"]+?)"|([a-zA-Z0-9_-]+)\b)/
-                        )
-                    {
+                    if ( "@{[ @charset_lines ]}" =~ /charset=(?:'([^']+?)'|"([^"]+?)"|([a-zA-Z0-9_-]+)\b)/ ) {
                         $charset = lc( $1 || $2 || $3 );
                     }
 
@@ -106,7 +106,7 @@ sub load {
 
 =head1 NAME
 
-Hubot::Scripts::shorten
+Hubot::Scripts::shorten - Shorten the URL using bit.ly
 
 =head1 SYNOPSIS
 
@@ -120,9 +120,13 @@ Shorten URLs with bit.ly
 
 =over
 
-=item HUBOT_BITLY_USERNAME
+=item *
 
-=item HUBOT_BITLY_API_KEY
+C<$ENV{HUBOT_BITLY_USERNAME}>
+
+=item *
+
+C<$ENV{HUBOT_BITLY_API_KEY}>
 
 =back
 

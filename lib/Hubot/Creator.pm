@@ -1,7 +1,6 @@
 package Hubot::Creator;
 
-use Moose;
-use namespace::autoclean;
+use Moo;
 
 use Cwd 'cwd';
 use File::Copy ();
@@ -11,7 +10,7 @@ use File::ShareDir 'dist_dir';
 use File::Spec::Functions 'catfile';
 use Try::Tiny;
 
-has 'path' => ( is => 'ro', isa => 'Str', default => './hubot', );
+has 'path' => ( is => 'ro', default => './hubot' );
 
 sub copy {
     my ( $self, $src, $dst ) = @_;
@@ -31,7 +30,7 @@ sub run {
         File::ShareDir::dist_dir('Hubot');
     }
     catch {
-        warn "not installed `Hubot` module";    # ignore $_
+        warn "not installed `Hubot` module"; # ignore $_
         cwd() . '/share';
     };
 
@@ -54,7 +53,6 @@ sub run {
         Hubot/Listener.pm
         Hubot/Adapter/Irc.pm
         Hubot/Adapter/Shell.pm
-        Hubot/Adapter/Campfire.pm
         Hubot/Message.pm
         Hubot/Brain.pm
         Hubot/Creator.pm
@@ -87,8 +85,8 @@ sub run {
     );
 
     for my $file (@files) {
-        my ( $src, $dst )
-            = ( catfile("$dist_dir/$file"), catfile("$path/$file") );
+        my ( $src, $dst ) =
+            ( catfile("$dist_dir/$file"), catfile("$path/$file") );
         $self->copy( $src, $dst );
     }
 
@@ -97,14 +95,12 @@ sub run {
     );
 
     for my $file (@bins) {
-        my ( $src, $dst )
-            = ( catfile("$dist_dir/$file"), catfile("$path/$file") );
+        my ( $src, $dst ) =
+            ( catfile("$dist_dir/$file"), catfile("$path/$file") );
         $self->copy( $src, $dst );
         chmod 0755, "$dst";
     }
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 

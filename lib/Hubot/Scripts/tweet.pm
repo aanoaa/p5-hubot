@@ -1,8 +1,9 @@
 package Hubot::Scripts::tweet;
 use strict;
 use warnings;
-use JSON::XS;
+
 use AnyEvent::HTTP::ScopedClient;
+use JSON qw/decode_json/;
 use URI::Escape;
 
 sub load {
@@ -16,8 +17,7 @@ sub load {
 
             return unless $authorization;
 
-            $msg->http('https://api.twitter.com/1.1/statuses/show.json')
-                ->header( { 'Authorization' => $authorization } )
+            $msg->http('https://api.twitter.com/1.1/statuses/show.json')->header( { 'Authorization' => $authorization } )
                 ->query( 'id' => $msg->match->[1] )->get(
                 sub {
                     my ( $body, $hdr ) = @_;
@@ -37,10 +37,7 @@ sub load {
 
     my $client = AnyEvent::HTTP::ScopedClient->new(
         'https://api.twitter.com/oauth2/token',
-        options => {
-            auth => uri_escape( $ENV{HUBOT_TWITTER_CONSUMER_KEY} ) . ':'
-                . uri_escape( $ENV{HUBOT_TWITTER_CONSUMER_SECRET} )
-        }
+        options => { auth => uri_escape( $ENV{HUBOT_TWITTER_CONSUMER_KEY} ) . ':' . uri_escape( $ENV{HUBOT_TWITTER_CONSUMER_SECRET} ) }
     );
 
     $client->post(
@@ -52,8 +49,8 @@ sub load {
 
             my $data = decode_json($body);
             if ( $hdr->{Status} =~ /^2/ ) {
-                my ( $token_type, $access_token )
-                    = ( $data->{token_type}, $data->{access_token} );
+                my ( $token_type, $access_token ) =
+                    ( $data->{token_type}, $data->{access_token} );
                 $authorization = ucfirst $token_type . " $access_token";
             }
             else {
@@ -71,7 +68,7 @@ sub load {
 
 =head1 NAME
 
-Hubot::Scripts::tweet
+Hubot::Scripts::tweet - Display tweet content
 
 =head1 SYNOPSIS
 
@@ -81,9 +78,13 @@ Hubot::Scripts::tweet
 
 =over
 
-=item HUBOT_TWITTER_CONSUMER_KEY
+=item *
 
-=item HUBOT_TWITTER_CONSUMER_SECRET
+C<$ENV{HUBOT_TWITTER_CONSUMER_KEY}>
+
+=item *
+
+C<$ENV{HUBOT_TWITTER_CONSUMER_SECRET}>
 
 =back
 

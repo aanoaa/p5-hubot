@@ -1,12 +1,9 @@
 package Hubot::Response;
-use Moose;
-use namespace::autoclean;
+use Moo;
 
-has 'robot' => ( is => 'ro', isa => 'Hubot::Robot', );
-
-has 'message' => ( is => 'rw', isa => 'Hubot::Message', );
-
-has 'match' => ( is => 'rw', isa => 'ArrayRef' );
+has 'robot'   => ( is => 'ro' );
+has 'message' => ( is => 'rw' );
+has 'match'   => ( is => 'rw', default => sub { [] } );
 
 sub send {
     my ( $self, @strings ) = @_;
@@ -30,7 +27,7 @@ sub reply {
 
 sub random {
     my ( $self, @items ) = @_;
-    return $items[rand( scalar(@items) )];
+    return $items[ rand( scalar(@items) ) ];
 }
 
 sub finish {
@@ -47,8 +44,6 @@ sub exist {
     my ( $self, $nick ) = @_;
     $self->robot->adapter->exist( $self->message->user, $nick );
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 

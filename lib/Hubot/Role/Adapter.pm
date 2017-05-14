@@ -7,6 +7,6 @@ sub whisper { }
 sub reply   { }
 sub run     { }
 sub close   { }
-sub exist   { }
+sub exit    { }
 
 1;

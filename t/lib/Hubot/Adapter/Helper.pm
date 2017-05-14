@@ -1,6 +1,5 @@
 package Hubot::Adapter::Helper;
-use Moose;
-use namespace::autoclean;
+use Moo;
 
 extends 'Hubot::Adapter';
 
@@ -8,20 +7,9 @@ use AnyEvent;
 use Encode 'decode_utf8';
 use Hubot::Message;
 
-has 'robot' => (
-    is  => 'ro',
-    isa => 'Hubot::Robot',
-);
-
-has 'cv' => (
-    is         => 'ro',
-    lazy_build => 1,
-);
-
-has 'interval' => (
-    is      => 'rw',
-    default => 1,
-);
+has 'robot' => ( is => 'ro' );
+has 'cv' => ( is => 'ro', default => sub { AnyEvent->condvar } );
+has 'interval' => ( is => 'rw', default => 1 );
 
 sub BUILD {
     my $self = shift;
@@ -29,8 +17,7 @@ sub BUILD {
     $self->robot->{receive} = [];
 }
 
-sub _build_cv { AnyEvent->condvar }
-sub close     { shift->cv->send }
+sub close { shift->cv->send }
 
 sub send {
     my ( $self, $user, @strings ) = @_;
@@ -80,7 +67,5 @@ sub run {
 
     # callback?
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
